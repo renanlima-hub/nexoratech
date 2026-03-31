@@ -15,7 +15,7 @@ const pacientes: Paciente[] = [
   { nome: "Harry Styles", status: "Agendado", dentista: "Dra. Giovanna Vilhena", horario: "14:00" },
   { nome: "Kayke Santana", status: "Aguardando", dentista: "Dr. Guilherme Dabul", horario: "15:30" },
   { nome: "Binho Mendes", status: "Concluído", dentista: "Dra. Guilherme Dabul", horario: "11:30" },
-  { nome: "Virginia Fonseca", status: "Agendado", dentista: "Dr. Felipe Nunes", horario: "13:00" },
+  { nome: "Lucas Ramon", status: "Agendado", dentista: "Dr. Felipe Nunes", horario: "13:00" },
   { nome: "Pietro Castilho", status: "Aguardando", dentista: "Dra. Giovanna Vilhena", horario: "11:00" },
 ];
 

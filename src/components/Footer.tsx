@@ -6,7 +6,7 @@ export default function Footer() {
           <p className="text-lg font-bold text-blue-900">NexoraTech</p>
           <p className="text-sm text-slate-500">
             Projeto acadêmico desenvolvido para demonstrar uma solução digital
-            de apoio à organização de atendimentos.
+            de auxílio à organização de atendimentos.
           </p>
         </div>
 
