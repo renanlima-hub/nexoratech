@@ -54,7 +54,7 @@ export default function Contato() {
               </label>
               <input
                 type="text"
-                placeholder="Digite seu nome"
+                placeholder="Informe seu nome completo"
                 {...register("nome", {
                   required: "O nome é obrigatório",
                   minLength: {
