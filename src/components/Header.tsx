@@ -7,7 +7,7 @@ export default function Header() {
       : "text-blue-100 hover:text-white transition pb-1";
 
   return (
-    <header className="sticky top-0 z-50 bg-blue-900 text-white shadow-md">
+    <header className="sticky top-0 z-50 bg-blue-800 text-white shadow-md">
       <div className="max-w-6xl mx-auto px-4 md:px-6 h-[72px] flex items-center justify-between">
         <Link to="/" className="text-2xl font-extrabold tracking-tight">
           Nexora<span className="text-cyan-300">Tech</span>
