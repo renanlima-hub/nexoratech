@@ -56,7 +56,7 @@ export default function Contato() {
                 type="text"
                 placeholder="Informe seu nome completo"
                 {...register("nome", {
-                  required: "O nome é obrigatório",
+                  required: "Por favor, informe seu nome completo",
                   minLength: {
                     value: 3,
                     message: "O nome deve ter pelo menos 3 caracteres",
