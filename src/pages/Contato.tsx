@@ -37,7 +37,7 @@ export default function Contato() {
           </h1>
 
           <p className="text-slate-600 text-lg mb-8 dark:text-slate-300">
-            Preencha o formulário abaixo para simular o envio de uma mensagem
+            Preencha o formulário abaixo para enviar uma mensagem
             para a equipe da NexoraTech.
           </p>
 
