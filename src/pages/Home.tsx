@@ -20,7 +20,7 @@ export default function Home() {
           />
 
           <h1 className="text-4xl md:text-5xl font-extrabold text-blue-900 leading-tight mb-5">
-            Tecnologia a serviço de quem cuida de sorrisos
+            Tecnologia inteligente para gestão odontológica
           </h1>
 
           <h2 className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mb-8 leading-relaxed">
