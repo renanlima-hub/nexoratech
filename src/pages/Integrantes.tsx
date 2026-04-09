@@ -11,7 +11,7 @@ export default function Integrantes() {
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-white border border-slate-200 rounded-3xl shadow-xl p-8 text-center">
+          <div className="bg-white rounded-2xl shadow-md p-6 text-center hover:shadow-xl hover:-translate-y-1 transition duration-300">
             <img
               src={renan}
               alt="Renan"
@@ -45,7 +45,7 @@ export default function Integrantes() {
             </div>
           </div>
 
-          <div className="bg-white border border-slate-200 rounded-3xl shadow-xl p-8 text-center">
+          <div className="bg-white rounded-2xl shadow-md p-6 text-center hover:shadow-xl hover:-translate-y-1 transition duration-300">
             <img
               src={andre}
               alt="André"
@@ -79,7 +79,7 @@ export default function Integrantes() {
             </div>
           </div>
 
-          <div className="bg-white border border-slate-200 rounded-3xl shadow-xl p-8 text-center">
+          <div className="bg-white rounded-2xl shadow-md p-6 text-center hover:shadow-xl hover:-translate-y-1 transition duration-300">
 
             <img
               src={gustavo}
@@ -90,7 +90,7 @@ export default function Integrantes() {
               Gustavo Souza Nascimento
             </h3>
 
-            <p className="text-slate-600 mb-2">RM: 567134</p>
+            <p className="text-slate-600 mb-4">RM: 567134</p>
 
             <div className="flex flex-col gap-2 items-center">
               <a
