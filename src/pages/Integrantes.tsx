@@ -1,5 +1,6 @@
 import renan from "../assets/renan.jpg";
 import andre from "../assets/andre.jpg";
+import gustavo from "../assets/gustavo.jpg";
 
 export default function Integrantes() {
   return (
@@ -78,14 +79,20 @@ export default function Integrantes() {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-md p-6 text-center">
-            <h3 className="text-xl font-bold text-blue-900 mb-2">
+          <div className="bg-white border border-slate-200 rounded-3xl shadow-xl p-8 text-center">
+
+            <img
+              src={gustavo}
+              alt="Gustavo"
+              className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-blue-200 mb-4"
+            />
+            <h3 className="text-xl font-bold text-blue-900">
               Gustavo Souza Nascimento
             </h3>
 
             <p className="text-slate-600 mb-2">RM: 567134</p>
 
-            <div className="mt-2">
+            <div className="flex flex-col gap-2 items-center">
               <a
                 href="https://github.com/GustavoSouNascimento"
                 target="_blank"
@@ -94,16 +101,17 @@ export default function Integrantes() {
               >
                 GitHub
               </a>
+
+              <a
+                href="https://www.linkedin.com/in/gustavo-souza-nascimento-698a81305/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-900 font-semibold hover:underline"
+              >
+                LinkedIn
+              </a>
+
             </div>
-            
-            <a
-              href="https://www.linkedin.com/in/gustavo-souza-nascimento-698a81305/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-900 font-semibold hover:underline"
-            >
-              LinkedIn
-            </a>
           </div>
         </div>
       </section>
