@@ -79,12 +79,21 @@ export default function Integrantes() {
           </div>
 
           <div className="bg-white rounded-2xl shadow-md p-6 text-center">
-              <h3 className="text-xl font-bold text-blue-900 mb-2">
-                Gustavo Souza Nascimento
-              </h3>
+            <h3 className="text-xl font-bold text-blue-900 mb-2">
+              Gustavo Souza Nascimento
+            </h3>
 
-              <p className="text-slate-600 mb-1">RM: 567134</p>
-            </div>
+            <p className="text-slate-600 mb-2">RM: 567134</p>
+
+            <a
+              href="https://www.linkedin.com/in/gustavo-souza-nascimento-698a81305/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-900 font-semibold hover:underline"
+            >
+              LinkedIn
+            </a>
+          </div>
         </div>
       </section>
     </main>
