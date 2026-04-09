@@ -9,7 +9,7 @@ export default function Integrantes() {
           Quem somos
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="bg-white border border-slate-200 rounded-3xl shadow-xl p-8 text-center">
             <img
               src={renan}
@@ -77,6 +77,14 @@ export default function Integrantes() {
               </a>
             </div>
           </div>
+
+          <div className="bg-white rounded-2xl shadow-md p-6 text-center">
+              <h3 className="text-xl font-bold text-blue-900 mb-2">
+                Gustavo Souza Nascimento
+              </h3>
+
+              <p className="text-slate-600 mb-1">RM: 567134</p>
+            </div>
         </div>
       </section>
     </main>
