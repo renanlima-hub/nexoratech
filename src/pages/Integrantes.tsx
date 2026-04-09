@@ -85,6 +85,17 @@ export default function Integrantes() {
 
             <p className="text-slate-600 mb-2">RM: 567134</p>
 
+            <div className="mt-2">
+              <a
+                href="https://github.com/GustavoSouNascimento"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-900 font-semibold hover:underline"
+              >
+                GitHub
+              </a>
+            </div>
+            
             <a
               href="https://www.linkedin.com/in/gustavo-souza-nascimento-698a81305/"
               target="_blank"
