@@ -43,6 +43,26 @@ export default function Sobre() {
         </div>
 
       </section>
+      <section className="max-w-6xl mx-auto px-6 pb-16">
+  <h2 className="text-2xl md:text-3xl font-bold text-blue-900 mb-6">
+    Objetivos do projeto
+  </h2>
+
+  <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <li className="bg-white rounded-xl shadow-md p-5">
+      Melhorar a comunicação entre equipe e dentistas voluntários.
+    </li>
+    <li className="bg-white rounded-xl shadow-md p-5">
+      Reduzir retrabalho e desencontro de informações.
+    </li>
+    <li className="bg-white rounded-xl shadow-md p-5">
+      Facilitar o acompanhamento dos atendimentos.
+    </li>
+    <li className="bg-white rounded-xl shadow-md p-5">
+      Tornar o processo mais organizado e eficiente.
+    </li>
+  </ul>
+</section>
     </main>
   );
 }
