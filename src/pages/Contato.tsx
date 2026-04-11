@@ -159,6 +159,17 @@ export default function Contato() {
           </form>
         </div>
       </section>
+      <section className="max-w-6xl mx-auto px-6 pb-16">
+  <div className="bg-white rounded-2xl shadow-md p-6">
+    <h2 className="text-2xl font-bold text-blue-900 mb-4">
+      Horário de atendimento
+    </h2>
+
+    <p className="text-slate-600">Segunda a sexta: 09h às 18h</p>
+    <p className="text-slate-600">Sábado: 09h às 13h</p>
+    <p className="text-slate-600">Domingo e feriados: fechado</p>
+  </div>
+</section>
     </main>
   );
 }
