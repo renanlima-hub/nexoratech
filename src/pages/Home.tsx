@@ -45,7 +45,34 @@ export default function Home() {
           </div>
         </div>
       </section>
+<section className="max-w-6xl mx-auto px-6 pb-16">
+  <h2 className="text-2xl md:text-3xl font-bold text-blue-900 mb-6">
+    Diferenciais da solução
+  </h2>
 
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="bg-white rounded-2xl shadow-md p-6">
+      <h3 className="text-xl font-bold text-blue-900 mb-2">Atendimento ágil</h3>
+      <p className="text-slate-600">
+        Redução do tempo gasto com dúvidas frequentes e orientações repetitivas.
+      </p>
+    </div>
+
+    <div className="bg-white rounded-2xl shadow-md p-6">
+      <h3 className="text-xl font-bold text-blue-900 mb-2">Organização centralizada</h3>
+      <p className="text-slate-600">
+        Informações concentradas em um único ambiente, com mais controle.
+      </p>
+    </div>
+
+    <div className="bg-white rounded-2xl shadow-md p-6">
+      <h3 className="text-xl font-bold text-blue-900 mb-2">Melhor experiência</h3>
+      <p className="text-slate-600">
+        Comunicação mais clara para equipe, dentistas voluntários e pacientes.
+      </p>
+    </div>
+  </div>
+</section>
       <section className="max-w-6xl mx-auto px-6 pb-8">
         <div className="bg-white rounded-3xl shadow-md border border-slate-200 p-8">
           <h2 className="text-2xl md:text-3xl font-bold text-blue-900 mb-6">
