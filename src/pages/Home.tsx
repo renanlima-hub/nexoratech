@@ -45,34 +45,45 @@ export default function Home() {
           </div>
         </div>
       </section>
-<section className="max-w-6xl mx-auto px-6 pb-16">
-  <h2 className="text-2xl md:text-3xl font-bold text-blue-900 mb-6">
-    Diferenciais da solução
-  </h2>
 
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div className="bg-white rounded-2xl shadow-md p-6">
-      <h3 className="text-xl font-bold text-blue-900 mb-2">Atendimento ágil</h3>
-      <p className="text-slate-600">
-        Redução do tempo gasto com dúvidas frequentes e orientações repetitivas.
-      </p>
-    </div>
+      <section className="max-w-6xl mx-auto px-6 pb-16">
+        <h2 className="text-2xl md:text-3xl font-bold text-blue-900 mb-6">
+          Diferenciais da solução
+        </h2>
 
-    <div className="bg-white rounded-2xl shadow-md p-6">
-      <h3 className="text-xl font-bold text-blue-900 mb-2">Organização centralizada</h3>
-      <p className="text-slate-600">
-        Informações concentradas em um único ambiente, com mais controle.
-      </p>
-    </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white rounded-2xl shadow-md p-6">
+            <h3 className="text-xl font-bold text-blue-900 mb-2">
+              Atendimento ágil
+            </h3>
 
-    <div className="bg-white rounded-2xl shadow-md p-6">
-      <h3 className="text-xl font-bold text-blue-900 mb-2">Melhor experiência</h3>
-      <p className="text-slate-600">
-        Comunicação mais clara para equipe, dentistas voluntários e pacientes.
-      </p>
-    </div>
-  </div>
-</section>
+            <p className="text-slate-600">
+              Redução do tempo gasto com dúvidas frequentes e orientações repetitivas.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-md p-6">
+            <h3 className="text-xl font-bold text-blue-900 mb-2">
+              Organização centralizada
+            </h3>
+
+            <p className="text-slate-600">
+              Informações concentradas em um único ambiente, com mais controle.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-md p-6">
+            <h3 className="text-xl font-bold text-blue-900 mb-2">
+              Melhor experiência
+            </h3>
+
+            <p className="text-slate-600">
+              Comunicação mais clara para equipe, dentistas voluntários e pacientes.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="max-w-6xl mx-auto px-6 pb-8">
         <div className="bg-white rounded-3xl shadow-md border border-slate-200 p-8">
           <h2 className="text-2xl md:text-3xl font-bold text-blue-900 mb-6">
@@ -83,7 +94,10 @@ export default function Home() {
             {indicadores.map((item) => (
               <div key={item.titulo}>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-slate-700 font-medium">{item.titulo}</span>
+                  <span className="text-slate-700 font-medium">
+                    {item.titulo}
+                  </span>
+
                   <span className="text-blue-900 font-bold">
                     {item.valor}
                     {item.titulo === "Redução de retrabalho" ? "%" : "+"}
@@ -101,7 +115,8 @@ export default function Home() {
           </div>
 
           <p className="text-sm text-slate-500 mt-6">
-            Indicadores ilustrativos criados para simular métricas de uso da plataforma.
+            Indicadores ilustrativos criados para simular métricas de uso da
+            plataforma.
           </p>
         </div>
       </section>
@@ -111,6 +126,7 @@ export default function Home() {
           <h2 className="text-2xl md:text-3xl font-bold text-blue-900 mb-4">
             O problema
           </h2>
+
           <p className="text-slate-700 leading-8 text-lg">
             A comunicação entre equipe, dentistas voluntários e pacientes
             acontece por canais fragmentados, como e-mails, planilhas e
@@ -130,6 +146,7 @@ export default function Home() {
             <h3 className="text-xl font-bold text-blue-900 mb-3">
               Centralização
             </h3>
+
             <p className="text-slate-600 leading-7">
               Dados unificados de pacientes e atendimentos em um só lugar.
             </p>
@@ -139,6 +156,7 @@ export default function Home() {
             <h3 className="text-xl font-bold text-blue-900 mb-3">
               Fluxos claros
             </h3>
+
             <p className="text-slate-600 leading-7">
               Acompanhamento de triagem, encaminhamento e tratamento com mais clareza.
             </p>
@@ -148,6 +166,7 @@ export default function Home() {
             <h3 className="text-xl font-bold text-blue-900 mb-3">
               Atendimento assistido
             </h3>
+
             <p className="text-slate-600 leading-7">
               Respostas rápidas e padronizadas para apoiar a operação.
             </p>
@@ -162,7 +181,10 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <article className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
-            <h3 className="text-xl font-bold text-blue-900 mb-3">Equipe</h3>
+            <h3 className="text-xl font-bold text-blue-900 mb-3">
+              Equipe
+            </h3>
+
             <p className="leading-7 text-slate-600">
               Visão unificada dos processos e padronização da operação.
             </p>
@@ -172,20 +194,23 @@ export default function Home() {
             <h3 className="text-xl font-bold text-blue-900 mb-3">
               Dentistas voluntários
             </h3>
+
             <p className="leading-7 text-slate-600">
               Acesso facilitado às informações e apoio no registro de atendimentos.
             </p>
           </article>
 
           <article className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
-            <h3 className="text-xl font-bold text-blue-900 mb-3">Pacientes</h3>
+            <h3 className="text-xl font-bold text-blue-900 mb-3">
+              Pacientes
+            </h3>
+
             <p className="leading-7 text-slate-600">
               Acompanhamento mais ágil, comunicação clara e melhor experiência.
             </p>
           </article>
         </div>
       </section>
-      
     </main>
   );
 }

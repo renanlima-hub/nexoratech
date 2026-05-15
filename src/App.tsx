@@ -13,6 +13,7 @@ import Agendados from "./pages/Agendados";
 import Aguardando from "./pages/Aguardando";
 import Concluidos from "./pages/Concluidos";
 import Dentistas from "./pages/Dentistas";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="/faq" element={<Faq />} />
             <Route path="/contato" element={<Contato />} />
             <Route path="/integrantes" element={<Integrantes />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/painel" element={<Painel />} />
             <Route path="/painel/agendados" element={<Agendados />} />
             <Route path="/painel/aguardando" element={<Aguardando />} />
