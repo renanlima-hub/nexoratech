@@ -10,6 +10,8 @@ import Contato from "./pages/Contato";
 import Integrantes from "./pages/Integrantes";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import Solucao from "./pages/Solucao";
+import Funcionalidades from "./pages/Funcionalidades";
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
             <Route path="/integrantes" element={<Integrantes />} />
             <Route path="/login" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/solucao" element={<Solucao  />} />
+            <Route path="/funcionalidades" element={<Funcionalidades  />} />
           </Routes>
         </main>
 

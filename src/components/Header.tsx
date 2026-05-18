@@ -18,6 +18,14 @@ export default function Header() {
             Início
           </NavLink>
 
+          <NavLink to="/solucao" className={navClass}>
+            Solução
+          </NavLink>
+
+          <NavLink to="/funcionalidades" className={navClass}>
+            Funcionalidades
+          </NavLink>
+
           <NavLink to="/sobre" className={navClass}>
             Sobre
           </NavLink>
