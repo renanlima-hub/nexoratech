@@ -8,11 +8,6 @@ import Sobre from "./pages/Sobre";
 import Faq from "./pages/Faq";
 import Contato from "./pages/Contato";
 import Integrantes from "./pages/Integrantes";
-import Painel from "./pages/Painel";
-import Agendados from "./pages/Agendados";
-import Aguardando from "./pages/Aguardando";
-import Concluidos from "./pages/Concluidos";
-import Dentistas from "./pages/Dentistas";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 
@@ -33,11 +28,6 @@ function App() {
             <Route path="/integrantes" element={<Integrantes />} />
             <Route path="/login" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/painel" element={<Painel />} />
-            <Route path="/painel/agendados" element={<Agendados />} />
-            <Route path="/painel/aguardando" element={<Aguardando />} />
-            <Route path="/painel/concluidos" element={<Concluidos />} />
-            <Route path="/painel/dentistas" element={<Dentistas />} />
           </Routes>
         </main>
 
