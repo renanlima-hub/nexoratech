@@ -23,14 +23,14 @@ export default function Login() {
       })
     );
 
-    navigate("/painel");
+    navigate("/Dashboard");
   };
 
   return (
     <main className="min-h-[70vh] bg-slate-50 flex items-center justify-center px-6 py-12">
       <section className="w-full max-w-md bg-white border border-slate-200 rounded-3xl shadow-md p-8">
         <h1 className="text-3xl font-extrabold text-blue-900 text-center mb-3">
-          Acessar painel
+          Acessar Dashboard
         </h1>
 
         <p className="text-slate-600 text-center mb-8">

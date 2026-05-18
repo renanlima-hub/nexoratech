@@ -14,6 +14,7 @@ import Aguardando from "./pages/Aguardando";
 import Concluidos from "./pages/Concluidos";
 import Dentistas from "./pages/Dentistas";
 import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="/contato" element={<Contato />} />
             <Route path="/integrantes" element={<Integrantes />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/painel" element={<Painel />} />
             <Route path="/painel/agendados" element={<Agendados />} />
             <Route path="/painel/aguardando" element={<Aguardando />} />
