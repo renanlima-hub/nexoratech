@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import BackToTop from "./components/BackToTop";
+
 import Home from "./pages/Home";
 import Sobre from "./pages/Sobre";
 import Faq from "./pages/Faq";
@@ -17,15 +18,29 @@ import PacienteDetalhes from "./pages/PacienteDetalhes";
 function AppContent() {
   const location = useLocation();
 
-  const isAdminPage = location.pathname.startsWith("/dashboard");
+  const isDashboardPage = location.pathname
+    .toLowerCase()
+    .startsWith("/dashboard");
+
+  if (isDashboardPage) {
+    return (
+      <div className="min-h-screen bg-black text-white">
+        <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/dashboard/paciente/:cpf"
+            element={<PacienteDetalhes />}
+          />
+        </Routes>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {!isAdminPage && <Header />}
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800">
+      <Header />
 
-      <main className="flex-1">
-        {!isAdminPage && <div className="pt-6" />}
-
+      <main className="flex-1 pt-6">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/sobre" element={<Sobre />} />
@@ -33,15 +48,13 @@ function AppContent() {
           <Route path="/contato" element={<Contato />} />
           <Route path="/integrantes" element={<Integrantes />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/paciente/:cpf" element={<PacienteDetalhes />} />
           <Route path="/solucao" element={<Solucao />} />
           <Route path="/funcionalidades" element={<Funcionalidades />} />
         </Routes>
       </main>
 
-      {!isAdminPage && <Footer />}
-      {!isAdminPage && <BackToTop />}
+      <Footer />
+      <BackToTop />
     </div>
   );
 }

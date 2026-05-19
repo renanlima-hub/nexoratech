@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 type AbaDashboard =
@@ -48,6 +48,8 @@ const pacientes = [
   },
 ];
 
+const pacientesMock = pacientes;
+
 const triagens = [
   {
     paciente: "Ana Clara Santos",
@@ -69,6 +71,8 @@ const triagens = [
   },
 ];
 
+const triagensMock = triagens;
+
 const voluntarios = [
   {
     nome: "Dr. Rafael Lima",
@@ -89,6 +93,8 @@ const voluntarios = [
     email: "bruno@nexora.com",
   },
 ];
+
+const voluntariosMock = voluntarios;
 
 const agendamentos = [
   {
@@ -114,6 +120,8 @@ const agendamentos = [
   },
 ];
 
+const agendamentosMock = agendamentos;
+
 const tratamentos = [
   {
     paciente: "Lucas Martins",
@@ -138,6 +146,8 @@ const tratamentos = [
   },
 ];
 
+const tratamentosMock = tratamentos;
+
 const atividadesRecentes = [
   "Nova triagem registrada para Ana Clara Santos.",
   "Voluntário Dr. Rafael Lima vinculado a um tratamento.",
@@ -147,12 +157,80 @@ const atividadesRecentes = [
 
 export default function Dashboard() {
   const navigate = useNavigate();
+
   const [abaAtiva, setAbaAtiva] = useState<AbaDashboard>("visao");
+
+  const [buscaPaciente, setBuscaPaciente] = useState("");
+  const [buscaTriagem, setBuscaTriagem] = useState("");
+  const [buscaVoluntario, setBuscaVoluntario] = useState("");
+  const [buscaAgendamento, setBuscaAgendamento] = useState("");
+  const [buscaTratamento, setBuscaTratamento] = useState("");
 
   const handleLogout = () => {
     localStorage.removeItem("usuarioLogado");
     navigate("/");
   };
+
+  const pacientesFiltrados = useMemo(() => {
+    return pacientes.filter(
+      (paciente) =>
+        paciente.nome.toLowerCase().includes(buscaPaciente.toLowerCase()) ||
+        paciente.cpf.includes(buscaPaciente) ||
+        paciente.status.toLowerCase().includes(buscaPaciente.toLowerCase()) ||
+        paciente.urgencia.toLowerCase().includes(buscaPaciente.toLowerCase()),
+    );
+  }, [buscaPaciente]);
+
+  const triagensFiltradas = useMemo(() => {
+    return triagens.filter(
+      (triagem) =>
+        triagem.paciente.toLowerCase().includes(buscaTriagem.toLowerCase()) ||
+        triagem.urgencia.toLowerCase().includes(buscaTriagem.toLowerCase()) ||
+        triagem.status.toLowerCase().includes(buscaTriagem.toLowerCase()),
+    );
+  }, [buscaTriagem]);
+
+  const voluntariosFiltrados = useMemo(() => {
+    return voluntarios.filter(
+      (voluntario) =>
+        voluntario.nome.toLowerCase().includes(buscaVoluntario.toLowerCase()) ||
+        voluntario.cro.toLowerCase().includes(buscaVoluntario.toLowerCase()) ||
+        voluntario.email.toLowerCase().includes(buscaVoluntario.toLowerCase()),
+    );
+  }, [buscaVoluntario]);
+
+  const agendamentosFiltrados = useMemo(() => {
+    return agendamentos.filter(
+      (agendamento) =>
+        agendamento.paciente
+          .toLowerCase()
+          .includes(buscaAgendamento.toLowerCase()) ||
+        agendamento.voluntario
+          .toLowerCase()
+          .includes(buscaAgendamento.toLowerCase()) ||
+        agendamento.status
+          .toLowerCase()
+          .includes(buscaAgendamento.toLowerCase()) ||
+        agendamento.local
+          .toLowerCase()
+          .includes(buscaAgendamento.toLowerCase()),
+    );
+  }, [buscaAgendamento]);
+
+  const tratamentosFiltrados = useMemo(() => {
+    return tratamentos.filter(
+      (tratamento) =>
+        tratamento.paciente
+          .toLowerCase()
+          .includes(buscaTratamento.toLowerCase()) ||
+        tratamento.voluntario
+          .toLowerCase()
+          .includes(buscaTratamento.toLowerCase()) ||
+        tratamento.status
+          .toLowerCase()
+          .includes(buscaTratamento.toLowerCase()),
+    );
+  }, [buscaTratamento]);
 
   const menuClass = (aba: AbaDashboard) =>
     abaAtiva === aba
@@ -162,183 +240,203 @@ export default function Dashboard() {
   return (
     <main className="min-h-screen bg-black text-slate-100">
       <div className="flex min-h-screen">
-        <aside className="hidden lg:flex w-72 min-h-screen bg-slate-950 border-r border-slate-800 px-5 py-6 flex-col fixed left-0 top-0">
+        <aside className="hidden lg:flex w-64 min-h-screen bg-[#020617] border-r border-slate-800 px-4 py-6 flex-col fixed left-0 top-0">
           <div className="mb-8">
-            <p className="text-xs text-slate-500 uppercase tracking-[0.2em]">
-              Painel administrativo
+            <p className="text-cyan-400 text-xs font-semibold uppercase tracking-[0.25em]">
+              Admin
             </p>
-            <h2 className="text-3xl font-extrabold text-white mt-2">
-              Nexora<span className="text-cyan-400">Tech</span>
-            </h2>
           </div>
 
           <nav className="flex flex-col gap-2">
             <button
               onClick={() => setAbaAtiva("visao")}
-              className={`${menuClass("visao")} text-left px-4 py-3 rounded-xl font-semibold transition`}
+              className={`${menuClass("visao")} text-left px-4 py-4 rounded-2xl font-semibold transition`}
             >
               Visão geral
             </button>
 
             <button
               onClick={() => setAbaAtiva("pacientes")}
-              className={`${menuClass("pacientes")} text-left px-4 py-3 rounded-xl font-semibold transition`}
+              className={`${menuClass("pacientes")} text-left px-4 py-4 rounded-2xl font-semibold transition`}
             >
               Pacientes
             </button>
 
             <button
               onClick={() => setAbaAtiva("triagens")}
-              className={`${menuClass("triagens")} text-left px-4 py-3 rounded-xl font-semibold transition`}
+              className={`${menuClass("triagens")} text-left px-4 py-4 rounded-2xl font-semibold transition`}
             >
               Triagens
             </button>
 
             <button
               onClick={() => setAbaAtiva("voluntarios")}
-              className={`${menuClass("voluntarios")} text-left px-4 py-3 rounded-xl font-semibold transition`}
+              className={`${menuClass("voluntarios")} text-left px-4 py-4 rounded-2xl font-semibold transition`}
             >
               Voluntários
             </button>
 
             <button
               onClick={() => setAbaAtiva("agendamentos")}
-              className={`${menuClass("agendamentos")} text-left px-4 py-3 rounded-xl font-semibold transition`}
+              className={`${menuClass("agendamentos")} text-left px-4 py-4 rounded-2xl font-semibold transition`}
             >
               Agendamentos
             </button>
 
             <button
               onClick={() => setAbaAtiva("tratamentos")}
-              className={`${menuClass("tratamentos")} text-left px-4 py-3 rounded-xl font-semibold transition`}
+              className={`${menuClass("tratamentos")} text-left px-4 py-4 rounded-2xl font-semibold transition`}
             >
               Tratamentos
             </button>
           </nav>
 
-          <div className="mt-auto border-t border-slate-800 pt-5">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-11 h-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-extrabold">
-                UA
-              </div>
-              <div>
-                <p className="font-bold text-white">Usuário Admin</p>
-                <p className="text-sm text-slate-400">Administrador</p>
-              </div>
-            </div>
-
-            <button
-              onClick={handleLogout}
-              className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-3 rounded-xl transition"
-            >
-              Sair
-            </button>
-          </div>
-        </aside>
-
-        <section className="w-full lg:ml-72">
-          <div className="sticky top-0 z-40 bg-black/80 backdrop-blur border-b border-slate-800">
-            <div className="px-5 md:px-8 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div>
-                <p className="text-xs font-semibold text-cyan-400 uppercase tracking-[0.2em]">
-                  Sistema administrativo
-                </p>
-                <h1 className="text-2xl md:text-3xl font-extrabold text-white">
-                  Dashboard NexoraTech
-                </h1>
-              </div>
-
+          <div className="mt-auto">
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-4">
               <div className="flex items-center gap-3">
-                <div className="text-right hidden sm:block">
-                  <p className="font-bold text-white">Usuário Admin</p>
-                  <p className="text-sm text-slate-400">Administrador</p>
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center font-extrabold text-white">
+                  UA
                 </div>
 
-                <div className="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-extrabold">
-                  UA
+                <div>
+                  <p className="font-bold text-white text-lg">Administrador</p>
+                  <p className="text-slate-400 text-sm">Sistema NexoraTech</p>
+                </div>
+              </div>
+
+              <div className="mt-5 flex items-center justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.2em] text-cyan-400">
+                    Status
+                  </p>
+
+                  <p className="text-emerald-400 font-semibold">Online</p>
                 </div>
 
                 <button
                   onClick={handleLogout}
-                  className="lg:hidden bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-xl transition"
+                  className="text-slate-300 hover:text-red-400 transition font-medium"
                 >
-                  Sair
+                  Encerrar
                 </button>
               </div>
             </div>
+          </div>
+        </aside>
 
-            <div className="lg:hidden px-5 pb-4 flex gap-2 overflow-x-auto">
-              {(["visao", "pacientes", "triagens", "voluntarios", "agendamentos", "tratamentos"] as AbaDashboard[]).map(
-                (aba) => (
-                  <button
-                    key={aba}
-                    onClick={() => setAbaAtiva(aba)}
-                    className={`${menuClass(aba)} whitespace-nowrap px-4 py-2 rounded-xl font-semibold transition`}
-                  >
-                    {aba === "visao"
-                      ? "Visão geral"
-                      : aba.charAt(0).toUpperCase() + aba.slice(1)}
-                  </button>
-                ),
-              )}
+        <section className="w-full lg:ml-64">
+          <div className="sticky top-0 z-40 bg-black/90 backdrop-blur border-b border-slate-800">
+            <div className="px-6 md:px-8 py-5 flex items-center justify-between">
+              <div>
+                <p className="text-cyan-400 text-xs font-semibold uppercase tracking-[0.2em]">
+                  Sistema administrativo
+                </p>
+
+                <h1 className="text-3xl font-extrabold text-white mt-1">
+                  Dashboard NexoraTech
+                </h1>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="text-right hidden sm:block">
+                  <p className="font-bold text-white">Usuário Admin</p>
+
+                  <p className="text-sm text-slate-400">Administrador</p>
+                </div>
+
+                <div className="w-14 h-14 rounded-full bg-blue-600 flex items-center justify-center font-extrabold text-white text-lg">
+                  UA
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="px-5 md:px-8 py-8">
+          <div className="px-6 md:px-8 py-8">
             <div className="bg-gradient-to-r from-blue-950 via-slate-900 to-black border border-slate-800 text-white rounded-3xl shadow-sm p-8 mb-6">
               <p className="text-cyan-400 text-sm font-semibold uppercase tracking-wide">
                 Área restrita
               </p>
 
-              <h2 className="text-3xl md:text-4xl font-extrabold mt-2">
+              <h2 className="text-3xl md:text-5xl font-extrabold mt-3 leading-tight">
                 Gestão odontológica centralizada
               </h2>
 
-              <p className="text-slate-300 mt-3 max-w-3xl leading-7">
+              <p className="text-slate-300 mt-4 max-w-3xl leading-8 text-lg">
                 Acompanhamento administrativo de pacientes, voluntários,
                 triagens, tratamentos e agendamentos da Turma do Bem.
               </p>
             </div>
 
-            {abaAtiva === "visao" && <VisaoGeral />}
+            {abaAtiva === "visao" && (
+              <VisaoGeral
+                pacientesFiltrados={pacientesFiltrados}
+                buscaPaciente={buscaPaciente}
+                setBuscaPaciente={setBuscaPaciente}
+              />
+            )}
+
             {abaAtiva === "pacientes" && (
               <CardTabela
                 titulo="Pacientes"
-                descricao="Dados simulados da tabela Paciente."
+                descricao="Pesquise pacientes por nome, CPF, status ou urgência."
               >
-                <TabelaPacientes />
+                <TabelaPacientes
+                  pacientes={pacientesFiltrados}
+                  buscaPaciente={buscaPaciente}
+                  setBuscaPaciente={setBuscaPaciente}
+                />
               </CardTabela>
             )}
+
             {abaAtiva === "triagens" && (
               <CardTabela
                 titulo="Triagens"
-                descricao="Controle de descrição, urgência e status."
+                descricao="Pesquise triagens por paciente, urgência ou status."
               >
-                <TabelaTriagens />
+                <TabelaTriagens
+                  triagens={triagensFiltradas}
+                  buscaTriagem={buscaTriagem}
+                  setBuscaTriagem={setBuscaTriagem}
+                />
               </CardTabela>
             )}
+
             {abaAtiva === "voluntarios" && (
               <CardTabela
                 titulo="Voluntários"
-                descricao="Dentistas voluntários cadastrados."
+                descricao="Pesquise voluntários por nome, CRO ou e-mail."
               >
-                <TabelaVoluntarios />
+                <TabelaVoluntarios
+                  voluntarios={voluntariosFiltrados}
+                  buscaVoluntario={buscaVoluntario}
+                  setBuscaVoluntario={setBuscaVoluntario}
+                />
               </CardTabela>
             )}
+
             {abaAtiva === "agendamentos" && (
               <CardTabela
                 titulo="Agendamentos"
-                descricao="Controle de datas, locais e status."
+                descricao="Pesquise agendamentos por paciente, voluntário, local ou status."
               >
-                <TabelaAgendamentos />
+                <TabelaAgendamentos
+                  agendamentos={agendamentosFiltrados}
+                  buscaAgendamento={buscaAgendamento}
+                  setBuscaAgendamento={setBuscaAgendamento}
+                />
               </CardTabela>
             )}
+
             {abaAtiva === "tratamentos" && (
               <CardTabela
                 titulo="Tratamentos"
-                descricao="Acompanhamento de tratamentos em andamento e concluídos."
+                descricao="Pesquise tratamentos por paciente, voluntário ou status."
               >
-                <TabelaTratamentos />
+                <TabelaTratamentos
+                  tratamentos={tratamentosFiltrados}
+                  buscaTratamento={buscaTratamento}
+                  setBuscaTratamento={setBuscaTratamento}
+                />
               </CardTabela>
             )}
           </div>
@@ -348,24 +446,32 @@ export default function Dashboard() {
   );
 }
 
-function VisaoGeral() {
+function VisaoGeral({
+  pacientesFiltrados,
+  buscaPaciente,
+  setBuscaPaciente,
+}: {
+  pacientesFiltrados: typeof pacientesMock;
+  buscaPaciente: string;
+  setBuscaPaciente: React.Dispatch<React.SetStateAction<string>>;
+}) {
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5 mb-6">
         {indicadores.map((item) => (
           <article
             key={item.titulo}
-            className="bg-slate-950 border border-slate-800 rounded-2xl shadow-sm p-6"
+            className="bg-slate-950 border border-slate-800 rounded-3xl p-7"
           >
             <h2 className="text-sm font-semibold text-slate-400">
               {item.titulo}
             </h2>
 
-            <p className="text-4xl font-extrabold text-white mt-3">
+            <p className="text-5xl font-extrabold text-white mt-5">
               {item.valor}
             </p>
 
-            <p className="text-sm text-slate-500 mt-2">{item.descricao}</p>
+            <p className="text-sm text-slate-500 mt-3">{item.descricao}</p>
           </article>
         ))}
       </div>
@@ -375,15 +481,19 @@ function VisaoGeral() {
           titulo="Pacientes recentes"
           descricao="Últimos pacientes acompanhados pela plataforma."
         >
-          <TabelaPacientes />
+          <TabelaPacientes
+            pacientes={pacientesFiltrados}
+            buscaPaciente={buscaPaciente}
+            setBuscaPaciente={setBuscaPaciente}
+          />
         </CardTabela>
 
-        <section className="bg-slate-950 border border-slate-800 rounded-3xl shadow-sm p-6">
-          <h2 className="text-2xl font-bold text-white mb-4">
+        <section className="bg-slate-950 border border-slate-800 rounded-3xl p-6">
+          <h2 className="text-3xl font-bold text-white mb-5">
             Atividades recentes
           </h2>
 
-          <div className="space-y-4">
+          <div className="space-y-5">
             {atividadesRecentes.map((atividade) => (
               <div
                 key={atividade}
@@ -395,18 +505,6 @@ function VisaoGeral() {
           </div>
         </section>
       </div>
-
-      <section className="mt-6 bg-slate-950 border border-slate-800 rounded-3xl shadow-sm p-6">
-        <h2 className="text-2xl font-bold text-white mb-4">
-          Preparado para integração com API
-        </h2>
-
-        <p className="text-slate-300 leading-7">
-          Esta tela utiliza dados mockados baseados no banco do projeto. Quando a
-          API Java estiver pronta, os arrays serão substituídos por requisições
-          reais ao backend.
-        </p>
-      </section>
     </>
   );
 }
@@ -421,206 +519,279 @@ function CardTabela({
   children: React.ReactNode;
 }) {
   return (
-    <section className="bg-slate-950 border border-slate-800 rounded-3xl shadow-sm p-6">
-      <h2 className="text-2xl font-bold text-white mb-2">{titulo}</h2>
-      <p className="text-slate-400 text-sm mb-5">{descricao}</p>
+    <section className="bg-slate-950 border border-slate-800 rounded-3xl p-6">
+      <h2 className="text-3xl font-bold text-white mb-2">{titulo}</h2>
+      <p className="text-slate-400 text-sm mb-6">{descricao}</p>
       {children}
     </section>
   );
 }
 
-function TabelaPacientes() {
+function CampoBusca({
+  placeholder,
+  value,
+  onChange,
+}: {
+  placeholder: string;
+  value: string;
+  onChange: React.Dispatch<React.SetStateAction<string>>;
+}) {
+  return (
+    <div className="mb-6">
+      <input
+        type="text"
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full bg-slate-900 border border-slate-700 text-white rounded-2xl px-5 py-4 outline-none focus:border-cyan-400 transition"
+      />
+    </div>
+  );
+}
+
+function TabelaPacientes({
+  pacientes,
+  buscaPaciente,
+  setBuscaPaciente,
+}: {
+  pacientes: typeof pacientesMock;
+  buscaPaciente: string;
+  setBuscaPaciente: React.Dispatch<React.SetStateAction<string>>;
+}) {
   const navigate = useNavigate();
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-left">
-        <thead>
-          <tr className="border-b border-slate-800 text-sm text-slate-400">
-            <th className="py-3 pr-4">Nome</th>
-            <th className="py-3 pr-4">CPF</th>
-            <th className="py-3 pr-4">Telefone</th>
-            <th className="py-3 pr-4">Status</th>
-            <th className="py-3 pr-4">Urgência</th>
-            <th className="py-3 pr-4">Ações</th>
-          </tr>
-        </thead>
+    <>
+      <CampoBusca
+        placeholder="Pesquisar paciente por nome, CPF, status ou urgência..."
+        value={buscaPaciente}
+        onChange={setBuscaPaciente}
+      />
 
-        <tbody>
-          {pacientes.map((paciente) => (
-            <tr
-              key={paciente.cpf}
-              className="border-b border-slate-900 last:border-0"
-            >
-              <td className="py-4 pr-4 font-semibold text-white">
-                {paciente.nome}
-              </td>
-              <td className="py-4 pr-4 text-slate-300">{paciente.cpf}</td>
-              <td className="py-4 pr-4 text-slate-300">{paciente.telefone}</td>
-              <td className="py-4 pr-4 text-slate-300">{paciente.status}</td>
-              <td className="py-4 pr-4">
-                <span className="inline-flex rounded-full bg-blue-600/20 text-cyan-300 px-3 py-1 text-sm font-semibold">
-                  {paciente.urgencia}
-                </span>
-              </td>
-              <td className="py-4 pr-4">
-                <button
-                  onClick={() => navigate(`/dashboard/paciente/${paciente.cpf}`)}
-                  className="bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold px-4 py-2 rounded-xl transition"
-                >
-                  Ver detalhes
-                </button>
-              </td>
+      <div className="overflow-x-auto">
+        <table className="w-full text-left">
+          <thead>
+            <tr className="border-b border-slate-800 text-sm text-slate-400">
+              <th className="py-3 pr-4">Nome</th>
+              <th className="py-3 pr-4">CPF</th>
+              <th className="py-3 pr-4">Telefone</th>
+              <th className="py-3 pr-4">Status</th>
+              <th className="py-3 pr-4">Urgência</th>
+              <th className="py-3 pr-4">Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+
+          <tbody>
+            {pacientes.map((paciente) => (
+              <tr
+                key={paciente.cpf}
+                className="border-b border-slate-900 last:border-0"
+              >
+                <td className="py-4 pr-4 font-semibold text-white">
+                  {paciente.nome}
+                </td>
+                <td className="py-4 pr-4 text-slate-300">{paciente.cpf}</td>
+                <td className="py-4 pr-4 text-slate-300">
+                  {paciente.telefone}
+                </td>
+                <td className="py-4 pr-4 text-slate-300">{paciente.status}</td>
+                <td className="py-4 pr-4">
+                  <span className="inline-flex rounded-full bg-blue-600/20 text-cyan-300 px-3 py-1 text-sm font-semibold">
+                    {paciente.urgencia}
+                  </span>
+                </td>
+                <td className="py-4 pr-4">
+                  <button
+                    onClick={() =>
+                      navigate(`/dashboard/paciente/${paciente.cpf}`)
+                    }
+                    className="bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold px-4 py-2 rounded-xl transition"
+                  >
+                    Ver detalhes
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {pacientes.length === 0 && (
+          <div className="text-center text-slate-400 py-10">
+            Nenhum paciente encontrado.
+          </div>
+        )}
+      </div>
+    </>
   );
 }
 
-function TabelaTriagens() {
+function TabelaTriagens({
+  triagens,
+  buscaTriagem,
+  setBuscaTriagem,
+}: {
+  triagens: typeof triagensMock;
+  buscaTriagem: string;
+  setBuscaTriagem: React.Dispatch<React.SetStateAction<string>>;
+}) {
+  return (
+    <>
+      <CampoBusca
+        placeholder="Pesquisar triagem por paciente, urgência ou status..."
+        value={buscaTriagem}
+        onChange={setBuscaTriagem}
+      />
+
+      <TabelaBase
+        headers={["Paciente", "Descrição", "Urgência", "Status"]}
+        rows={triagens.map((triagem) => [
+          triagem.paciente,
+          triagem.descricao,
+          triagem.urgencia,
+          triagem.status,
+        ])}
+        emptyMessage="Nenhuma triagem encontrada."
+      />
+    </>
+  );
+}
+
+function TabelaVoluntarios({
+  voluntarios,
+  buscaVoluntario,
+  setBuscaVoluntario,
+}: {
+  voluntarios: typeof voluntariosMock;
+  buscaVoluntario: string;
+  setBuscaVoluntario: React.Dispatch<React.SetStateAction<string>>;
+}) {
+  return (
+    <>
+      <CampoBusca
+        placeholder="Pesquisar voluntário por nome, CRO ou e-mail..."
+        value={buscaVoluntario}
+        onChange={setBuscaVoluntario}
+      />
+
+      <TabelaBase
+        headers={["Nome", "CRO", "Telefone", "E-mail"]}
+        rows={voluntarios.map((voluntario) => [
+          voluntario.nome,
+          voluntario.cro,
+          voluntario.telefone,
+          voluntario.email,
+        ])}
+        emptyMessage="Nenhum voluntário encontrado."
+      />
+    </>
+  );
+}
+
+function TabelaAgendamentos({
+  agendamentos,
+  buscaAgendamento,
+  setBuscaAgendamento,
+}: {
+  agendamentos: typeof agendamentosMock;
+  buscaAgendamento: string;
+  setBuscaAgendamento: React.Dispatch<React.SetStateAction<string>>;
+}) {
+  return (
+    <>
+      <CampoBusca
+        placeholder="Pesquisar agendamento por paciente, voluntário, local ou status..."
+        value={buscaAgendamento}
+        onChange={setBuscaAgendamento}
+      />
+
+      <TabelaBase
+        headers={["Paciente", "Voluntário", "Data", "Local", "Status"]}
+        rows={agendamentos.map((agendamento) => [
+          agendamento.paciente,
+          agendamento.voluntario,
+          agendamento.data,
+          agendamento.local,
+          agendamento.status,
+        ])}
+        emptyMessage="Nenhum agendamento encontrado."
+      />
+    </>
+  );
+}
+
+function TabelaTratamentos({
+  tratamentos,
+  buscaTratamento,
+  setBuscaTratamento,
+}: {
+  tratamentos: typeof tratamentosMock;
+  buscaTratamento: string;
+  setBuscaTratamento: React.Dispatch<React.SetStateAction<string>>;
+}) {
+  return (
+    <>
+      <CampoBusca
+        placeholder="Pesquisar tratamento por paciente, voluntário ou status..."
+        value={buscaTratamento}
+        onChange={setBuscaTratamento}
+      />
+
+      <TabelaBase
+        headers={["Paciente", "Voluntário", "Início", "Conclusão", "Status"]}
+        rows={tratamentos.map((tratamento) => [
+          tratamento.paciente,
+          tratamento.voluntario,
+          tratamento.inicio,
+          tratamento.conclusao,
+          tratamento.status,
+        ])}
+        emptyMessage="Nenhum tratamento encontrado."
+      />
+    </>
+  );
+}
+
+function TabelaBase({
+  headers,
+  rows,
+  emptyMessage,
+}: {
+  headers: string[];
+  rows: string[][];
+  emptyMessage: string;
+}) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-left">
         <thead>
           <tr className="border-b border-slate-800 text-sm text-slate-400">
-            <th className="py-3 pr-4">Paciente</th>
-            <th className="py-3 pr-4">Descrição</th>
-            <th className="py-3 pr-4">Urgência</th>
-            <th className="py-3 pr-4">Status</th>
+            {headers.map((header) => (
+              <th key={header} className="py-3 pr-4">
+                {header}
+              </th>
+            ))}
           </tr>
         </thead>
 
         <tbody>
-          {triagens.map((triagem) => (
+          {rows.map((row) => (
             <tr
-              key={triagem.paciente}
+              key={row.join("-")}
               className="border-b border-slate-900 last:border-0"
             >
-              <td className="py-4 pr-4 font-semibold text-white">
-                {triagem.paciente}
-              </td>
-              <td className="py-4 pr-4 text-slate-300">
-                {triagem.descricao}
-              </td>
-              <td className="py-4 pr-4 text-slate-300">{triagem.urgencia}</td>
-              <td className="py-4 pr-4 text-slate-300">{triagem.status}</td>
+              {row.map((cell) => (
+                <td key={cell} className="py-4 pr-4 text-slate-300">
+                  {cell}
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>
       </table>
-    </div>
-  );
-}
 
-function TabelaVoluntarios() {
-  return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-left">
-        <thead>
-          <tr className="border-b border-slate-800 text-sm text-slate-400">
-            <th className="py-3 pr-4">Nome</th>
-            <th className="py-3 pr-4">CRO</th>
-            <th className="py-3 pr-4">Telefone</th>
-            <th className="py-3 pr-4">E-mail</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {voluntarios.map((voluntario) => (
-            <tr
-              key={voluntario.cro}
-              className="border-b border-slate-900 last:border-0"
-            >
-              <td className="py-4 pr-4 font-semibold text-white">
-                {voluntario.nome}
-              </td>
-              <td className="py-4 pr-4 text-slate-300">{voluntario.cro}</td>
-              <td className="py-4 pr-4 text-slate-300">
-                {voluntario.telefone}
-              </td>
-              <td className="py-4 pr-4 text-slate-300">{voluntario.email}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-function TabelaAgendamentos() {
-  return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-left">
-        <thead>
-          <tr className="border-b border-slate-800 text-sm text-slate-400">
-            <th className="py-3 pr-4">Paciente</th>
-            <th className="py-3 pr-4">Voluntário</th>
-            <th className="py-3 pr-4">Data</th>
-            <th className="py-3 pr-4">Local</th>
-            <th className="py-3 pr-4">Status</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {agendamentos.map((agendamento) => (
-            <tr
-              key={`${agendamento.paciente}-${agendamento.data}`}
-              className="border-b border-slate-900 last:border-0"
-            >
-              <td className="py-4 pr-4 font-semibold text-white">
-                {agendamento.paciente}
-              </td>
-              <td className="py-4 pr-4 text-slate-300">
-                {agendamento.voluntario}
-              </td>
-              <td className="py-4 pr-4 text-slate-300">{agendamento.data}</td>
-              <td className="py-4 pr-4 text-slate-300">{agendamento.local}</td>
-              <td className="py-4 pr-4 text-slate-300">{agendamento.status}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-function TabelaTratamentos() {
-  return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-left">
-        <thead>
-          <tr className="border-b border-slate-800 text-sm text-slate-400">
-            <th className="py-3 pr-4">Paciente</th>
-            <th className="py-3 pr-4">Voluntário</th>
-            <th className="py-3 pr-4">Início</th>
-            <th className="py-3 pr-4">Conclusão</th>
-            <th className="py-3 pr-4">Status</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {tratamentos.map((tratamento) => (
-            <tr
-              key={`${tratamento.paciente}-${tratamento.inicio}`}
-              className="border-b border-slate-900 last:border-0"
-            >
-              <td className="py-4 pr-4 font-semibold text-white">
-                {tratamento.paciente}
-              </td>
-              <td className="py-4 pr-4 text-slate-300">
-                {tratamento.voluntario}
-              </td>
-              <td className="py-4 pr-4 text-slate-300">{tratamento.inicio}</td>
-              <td className="py-4 pr-4 text-slate-300">
-                {tratamento.conclusao}
-              </td>
-              <td className="py-4 pr-4 text-slate-300">{tratamento.status}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {rows.length === 0 && (
+        <div className="text-center text-slate-400 py-10">{emptyMessage}</div>
+      )}
     </div>
   );
 }
