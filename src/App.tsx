@@ -12,6 +12,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Solucao from "./pages/Solucao";
 import Funcionalidades from "./pages/Funcionalidades";
+import PacienteDetalhes from "./pages/PacienteDetalhes";
 
 function App() {
   return (
@@ -30,8 +31,9 @@ function App() {
             <Route path="/integrantes" element={<Integrantes />} />
             <Route path="/login" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/solucao" element={<Solucao  />} />
-            <Route path="/funcionalidades" element={<Funcionalidades  />} />
+            <Route path="/dashboard/paciente/:cpf" element={<PacienteDetalhes />} />
+            <Route path="/solucao" element={<Solucao />} />
+            <Route path="/funcionalidades" element={<Funcionalidades />} />
           </Routes>
         </main>
 
