@@ -23,7 +23,8 @@ export default function Login() {
       })
     );
 
-    navigate("/Dashboard");
+   localStorage.setItem("usuarioLogado", "true");
+   navigate("/dashboard");
   };
 
   return (

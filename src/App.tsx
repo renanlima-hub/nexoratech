@@ -1,8 +1,10 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import BackToTop from "./components/BackToTop";
+import PrivateRoute from "./components/PrivateRoute";
 
 import Home from "./pages/Home";
 import Sobre from "./pages/Sobre";
@@ -26,10 +28,22 @@ function AppContent() {
     return (
       <div className="min-h-screen bg-black text-white">
         <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+
           <Route
             path="/dashboard/paciente/:cpf"
-            element={<PacienteDetalhes />}
+            element={
+              <PrivateRoute>
+                <PacienteDetalhes />
+              </PrivateRoute>
+            }
           />
         </Routes>
       </div>
@@ -49,7 +63,10 @@ function AppContent() {
           <Route path="/integrantes" element={<Integrantes />} />
           <Route path="/login" element={<Login />} />
           <Route path="/solucao" element={<Solucao />} />
-          <Route path="/funcionalidades" element={<Funcionalidades />} />
+          <Route
+            path="/funcionalidades"
+            element={<Funcionalidades />}
+          />
         </Routes>
       </main>
 
