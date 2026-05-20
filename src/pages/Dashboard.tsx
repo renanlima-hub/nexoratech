@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 type AbaDashboard =
@@ -155,16 +155,56 @@ const atividadesRecentes = [
   "Tratamento de Pedro Henrique foi concluído.",
 ];
 
+const notificacoes = [
+  "Paciente Ana Clara Santos está classificada com urgência alta.",
+  "Existem agendamentos pendentes de confirmação.",
+  "Tratamento de Pedro Henrique foi concluído recentemente.",
+  "Novo voluntário disponível para atendimento odontológico.",
+];
+
+const graficoStatusPacientes = [
+  { label: "Aguardando", valor: 35 },
+  { label: "Tratamento", valor: 45 },
+  { label: "Agendado", valor: 25 },
+  { label: "Concluído", valor: 60 },
+];
+
+const graficoVolumeOperacional = [
+  { label: "Pacientes", valor: 320 },
+  { label: "Triagens", valor: 86 },
+  { label: "Agendamentos", valor: 128 },
+  { label: "Tratamentos", valor: 74 },
+];
+
+const graficoEvolucao = [
+  { mes: "Jan", valor: 20 },
+  { mes: "Fev", valor: 35 },
+  { mes: "Mar", valor: 28 },
+  { mes: "Abr", valor: 52 },
+  { mes: "Mai", valor: 74 },
+  { mes: "Jun", valor: 68 },
+];
+
 export default function Dashboard() {
   const navigate = useNavigate();
 
   const [abaAtiva, setAbaAtiva] = useState<AbaDashboard>("visao");
-
   const [buscaPaciente, setBuscaPaciente] = useState("");
   const [buscaTriagem, setBuscaTriagem] = useState("");
   const [buscaVoluntario, setBuscaVoluntario] = useState("");
   const [buscaAgendamento, setBuscaAgendamento] = useState("");
   const [buscaTratamento, setBuscaTratamento] = useState("");
+  const [notificacaoAtual, setNotificacaoAtual] = useState(0);
+
+  useEffect(() => {
+    const intervalo = setInterval(() => {
+      setNotificacaoAtual((atual) =>
+        atual === notificacoes.length - 1 ? 0 : atual + 1,
+      );
+    }, 3500);
+
+    return () => clearInterval(intervalo);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("usuarioLogado");
@@ -226,9 +266,7 @@ export default function Dashboard() {
         tratamento.voluntario
           .toLowerCase()
           .includes(buscaTratamento.toLowerCase()) ||
-        tratamento.status
-          .toLowerCase()
-          .includes(buscaTratamento.toLowerCase()),
+        tratamento.status.toLowerCase().includes(buscaTratamento.toLowerCase()),
     );
   }, [buscaTratamento]);
 
@@ -248,47 +286,28 @@ export default function Dashboard() {
           </div>
 
           <nav className="flex flex-col gap-2">
-            <button
-              onClick={() => setAbaAtiva("visao")}
-              className={`${menuClass("visao")} text-left px-4 py-4 rounded-2xl font-semibold transition`}
-            >
-              Visão geral
-            </button>
-
-            <button
-              onClick={() => setAbaAtiva("pacientes")}
-              className={`${menuClass("pacientes")} text-left px-4 py-4 rounded-2xl font-semibold transition`}
-            >
-              Pacientes
-            </button>
-
-            <button
-              onClick={() => setAbaAtiva("triagens")}
-              className={`${menuClass("triagens")} text-left px-4 py-4 rounded-2xl font-semibold transition`}
-            >
-              Triagens
-            </button>
-
-            <button
-              onClick={() => setAbaAtiva("voluntarios")}
-              className={`${menuClass("voluntarios")} text-left px-4 py-4 rounded-2xl font-semibold transition`}
-            >
-              Voluntários
-            </button>
-
-            <button
-              onClick={() => setAbaAtiva("agendamentos")}
-              className={`${menuClass("agendamentos")} text-left px-4 py-4 rounded-2xl font-semibold transition`}
-            >
-              Agendamentos
-            </button>
-
-            <button
-              onClick={() => setAbaAtiva("tratamentos")}
-              className={`${menuClass("tratamentos")} text-left px-4 py-4 rounded-2xl font-semibold transition`}
-            >
-              Tratamentos
-            </button>
+            {(
+              [
+                "visao",
+                "pacientes",
+                "triagens",
+                "voluntarios",
+                "agendamentos",
+                "tratamentos",
+              ] as AbaDashboard[]
+            ).map((aba) => (
+              <button
+                key={aba}
+                onClick={() => setAbaAtiva(aba)}
+                className={`${menuClass(
+                  aba,
+                )} text-left px-4 py-4 rounded-2xl font-semibold transition`}
+              >
+                {aba === "visao"
+                  ? "Visão geral"
+                  : aba.charAt(0).toUpperCase() + aba.slice(1)}
+              </button>
+            ))}
           </nav>
 
           <div className="mt-auto">
@@ -347,6 +366,23 @@ export default function Dashboard() {
                 <div className="w-14 h-14 rounded-full bg-blue-600 flex items-center justify-center font-extrabold text-white text-lg">
                   UA
                 </div>
+              </div>
+            </div>
+
+            <div className="px-6 md:px-8 pb-5">
+              <div className="bg-slate-950 border border-slate-800 rounded-2xl px-5 py-4 flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.2em] text-cyan-400">
+                    Notificação
+                  </p>
+                  <p className="text-slate-300 mt-1">
+                    {notificacoes[notificacaoAtual]}
+                  </p>
+                </div>
+
+                <span className="hidden md:inline-flex bg-blue-600/20 text-cyan-300 px-4 py-2 rounded-full text-sm font-semibold">
+                  Atualiza automaticamente
+                </span>
               </div>
             </div>
           </div>
@@ -476,6 +512,38 @@ function VisaoGeral({
         ))}
       </div>
 
+      <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 mb-6">
+        <GraficoBarras
+          titulo="Status dos pacientes"
+          dados={graficoStatusPacientes}
+        />
+
+        <GraficoBarras
+          titulo="Volume operacional"
+          dados={graficoVolumeOperacional}
+        />
+
+        <GraficoEvolucao
+          titulo="Evolução de atendimentos"
+          dados={graficoEvolucao}
+        />
+
+        <section className="bg-slate-950 border border-slate-800 rounded-3xl p-6">
+          <h2 className="text-3xl font-bold text-white mb-5">Notificações</h2>
+
+          <div className="space-y-4">
+            {notificacoes.map((notificacao) => (
+              <div
+                key={notificacao}
+                className="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-slate-300"
+              >
+                {notificacao}
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+
       <div className="grid grid-cols-1 xl:grid-cols-[2fr_1fr] gap-6">
         <CardTabela
           titulo="Pacientes recentes"
@@ -590,16 +658,21 @@ function TabelaPacientes({
                 <td className="py-4 pr-4 font-semibold text-white">
                   {paciente.nome}
                 </td>
+
                 <td className="py-4 pr-4 text-slate-300">{paciente.cpf}</td>
+
                 <td className="py-4 pr-4 text-slate-300">
                   {paciente.telefone}
                 </td>
+
                 <td className="py-4 pr-4 text-slate-300">{paciente.status}</td>
+
                 <td className="py-4 pr-4">
                   <span className="inline-flex rounded-full bg-blue-600/20 text-cyan-300 px-3 py-1 text-sm font-semibold">
                     {paciente.urgencia}
                   </span>
                 </td>
+
                 <td className="py-4 pr-4">
                   <button
                     onClick={() =>
@@ -793,5 +866,87 @@ function TabelaBase({
         <div className="text-center text-slate-400 py-10">{emptyMessage}</div>
       )}
     </div>
+  );
+}
+
+function GraficoBarras({
+  titulo,
+  dados,
+}: {
+  titulo: string;
+  dados: { label: string; valor: number }[];
+}) {
+  const maiorValor = Math.max(...dados.map((item) => item.valor));
+
+  return (
+    <section className="bg-slate-950 border border-slate-800 rounded-3xl p-6">
+      <h2 className="text-3xl font-bold text-white mb-5">{titulo}</h2>
+
+      <div className="space-y-5">
+        {dados.map((item) => (
+          <div key={item.label}>
+            <div className="flex justify-between text-sm mb-2">
+              <span className="text-slate-300">{item.label}</span>
+              <span className="text-cyan-400 font-bold">{item.valor}</span>
+            </div>
+
+            <div className="w-full h-3 bg-slate-800 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 rounded-full"
+                style={{ width: `${(item.valor / maiorValor) * 100}%` }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function GraficoEvolucao({
+  titulo,
+  dados,
+}: {
+  titulo: string;
+  dados: { mes: string; valor: number }[];
+}) {
+  const maiorValor = Math.max(...dados.map((item) => item.valor));
+
+  return (
+    <section className="bg-slate-950 border border-slate-800 rounded-3xl p-6">
+      <h2 className="text-3xl font-bold text-white mb-5">{titulo}</h2>
+
+      <div className="flex items-end justify-between gap-3 h-52">
+        {dados.map((item, index) => {
+          const altura = Math.max((item.valor / maiorValor) * 170, 20);
+          const subiu = index === 0 || item.valor >= dados[index - 1].valor;
+
+          return (
+            <div key={item.mes} className="flex flex-col items-center flex-1">
+              <span
+                className={`text-xs mb-2 font-bold ${
+                  subiu ? "text-emerald-400" : "text-red-400"
+                }`}
+              >
+                {subiu ? "↑" : "↓"} {item.valor}
+              </span>
+
+              <div className="w-full bg-slate-800 rounded-t-2xl overflow-hidden flex items-end">
+                <div
+                  className={`w-full rounded-t-2xl ${
+                    subiu
+                      ? "bg-gradient-to-t from-emerald-500 to-cyan-300"
+                      : "bg-gradient-to-t from-red-500 to-orange-300"
+                  }`}
+                  style={{ height: `${altura}px` }}
+                />
+              </div>
+
+              <p className="text-slate-400 text-sm mt-3">{item.mes}</p>
+            </div>
+          );
+        })}
+      </div>
+    </section>
   );
 }
