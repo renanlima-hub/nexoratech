@@ -16,7 +16,11 @@ type AbaDashboard =
   | "agendamentos"
   | "tratamentos";
 
-type TipoCadastro = "paciente" | "triagem" | "agendamento" | "voluntario";
+type TipoCadastro =
+  | "paciente"
+  | "triagem"
+  | "agendamento"
+  | "voluntario";
 
 type Paciente = {
   nome: string;
@@ -26,63 +30,12 @@ type Paciente = {
   urgencia: string;
 };
 
-const indicadores = [
-  { titulo: "Pacientes", valor: "320", descricao: "Cadastrados" },
-  { titulo: "Voluntários", valor: "40", descricao: "Dentistas ativos" },
-  { titulo: "Triagens", valor: "86", descricao: "Registradas" },
-  { titulo: "Agendamentos", valor: "128", descricao: "Criados" },
-  { titulo: "Tratamentos", valor: "74", descricao: "Acompanhados" },
-];
-
-const pacientes: Paciente[] = [
-  {
-    nome: "Ana Clara Santos",
-    cpf: "12345678901",
-    telefone: "(11) 98200-1234",
-    status: "Aguardando triagem",
-    urgencia: "Alta",
-  },
-  {
-    nome: "Lucas Martins",
-    cpf: "98765432100",
-    telefone: "(11) 97654-8899",
-    status: "Tratamento em andamento",
-    urgencia: "Média",
-  },
-  {
-    nome: "Beatriz Oliveira",
-    cpf: "45678912300",
-    telefone: "(11) 96555-4300",
-    status: "Agendado",
-    urgencia: "Baixa",
-  },
-  {
-    nome: "Pedro Henrique",
-    cpf: "78945612300",
-    telefone: "(11) 94444-2200",
-    status: "Concluído",
-    urgencia: "Baixa",
-  },
-];
-
 const triagens = [
   {
     paciente: "Ana Clara Santos",
     descricao: "Dor intensa e dificuldade para mastigar",
     urgencia: "Alta",
     status: "Pendente",
-  },
-  {
-    paciente: "Lucas Martins",
-    descricao: "Avaliação inicial para tratamento",
-    urgencia: "Média",
-    status: "Em análise",
-  },
-  {
-    paciente: "Beatriz Oliveira",
-    descricao: "Consulta preventiva",
-    urgencia: "Baixa",
-    status: "Concluída",
   },
 ];
 
@@ -92,18 +45,6 @@ const voluntarios = [
     cro: "CRO-SP 12345",
     telefone: "(11) 90000-1111",
     email: "rafael@nexora.com",
-  },
-  {
-    nome: "Dra. Camila Rocha",
-    cro: "CRO-SP 54321",
-    telefone: "(11) 90000-2222",
-    email: "camila@nexora.com",
-  },
-  {
-    nome: "Dr. Bruno Alves",
-    cro: "CRO-SP 67890",
-    telefone: "(11) 90000-3333",
-    email: "bruno@nexora.com",
   },
 ];
 
@@ -115,20 +56,6 @@ const agendamentos = [
     local: "Clínica Parceira Centro",
     status: "Agendado",
   },
-  {
-    paciente: "Lucas Martins",
-    voluntario: "Dra. Camila Rocha",
-    data: "22/05/2026",
-    local: "Unidade Zona Leste",
-    status: "Confirmado",
-  },
-  {
-    paciente: "Beatriz Oliveira",
-    voluntario: "Dr. Bruno Alves",
-    data: "25/05/2026",
-    local: "Clínica Voluntária Norte",
-    status: "Pendente",
-  },
 ];
 
 const tratamentos = [
@@ -139,27 +66,14 @@ const tratamentos = [
     conclusao: "Em andamento",
     status: "Ativo",
   },
-  {
-    paciente: "Pedro Henrique",
-    voluntario: "Dr. Rafael Lima",
-    inicio: "02/04/2026",
-    conclusao: "14/05/2026",
-    status: "Concluído",
-  },
-  {
-    paciente: "Ana Clara Santos",
-    voluntario: "Dr. Bruno Alves",
-    inicio: "A iniciar",
-    conclusao: "Não definida",
-    status: "Aguardando",
-  },
 ];
 
-const atividadesRecentes = [
-  "Nova triagem registrada para Ana Clara Santos.",
-  "Voluntário Dr. Rafael Lima vinculado a um tratamento.",
-  "Agendamento criado para Lucas Martins.",
-  "Tratamento de Pedro Henrique foi concluído.",
+const indicadores = [
+  { titulo: "Pacientes", valor: "320", descricao: "Cadastrados" },
+  { titulo: "Voluntários", valor: "40", descricao: "Dentistas ativos" },
+  { titulo: "Triagens", valor: "86", descricao: "Registradas" },
+  { titulo: "Agendamentos", valor: "128", descricao: "Criados" },
+  { titulo: "Tratamentos", valor: "74", descricao: "Acompanhados" },
 ];
 
 const notificacoes = [
@@ -167,6 +81,13 @@ const notificacoes = [
   "Existem agendamentos pendentes de confirmação.",
   "Tratamento de Pedro Henrique foi concluído recentemente.",
   "Novo voluntário disponível para atendimento odontológico.",
+];
+
+const atividadesRecentes = [
+  "Nova triagem registrada para Ana Clara Santos.",
+  "Voluntário Dr. Rafael Lima vinculado a um tratamento.",
+  "Agendamento criado para Lucas Martins.",
+  "Tratamento de Pedro Henrique foi concluído.",
 ];
 
 const graficoStatusPacientes = [
@@ -195,25 +116,60 @@ const graficoEvolucao = [
 export default function Dashboard() {
   const navigate = useNavigate();
 
-  const [abaAtiva, setAbaAtiva] = useState<AbaDashboard>("visao");
-  const [buscaPaciente, setBuscaPaciente] = useState("");
-  const [buscaTriagem, setBuscaTriagem] = useState("");
-  const [buscaVoluntario, setBuscaVoluntario] = useState("");
-  const [buscaAgendamento, setBuscaAgendamento] = useState("");
-  const [buscaTratamento, setBuscaTratamento] = useState("");
+  const [abaAtiva, setAbaAtiva] =
+    useState<AbaDashboard>("visao");
 
-  const [pacientesApi, setPacientesApi] = useState<Paciente[]>(pacientes);
-  const [carregandoPacientes, setCarregandoPacientes] = useState(false);
-  const [erroPacientes, setErroPacientes] = useState("");
+  const [buscaPaciente, setBuscaPaciente] =
+    useState("");
 
-  const [notificacaoAtual, setNotificacaoAtual] = useState(0);
-  const [modalAberto, setModalAberto] = useState(false);
-  const [tipoCadastro, setTipoCadastro] = useState<TipoCadastro>("paciente");
+  const [buscaTriagem, setBuscaTriagem] =
+    useState("");
+
+  const [buscaVoluntario, setBuscaVoluntario] =
+    useState("");
+
+  const [buscaAgendamento, setBuscaAgendamento] =
+    useState("");
+
+  const [buscaTratamento, setBuscaTratamento] =
+    useState("");
+
+  const [pacientesApi, setPacientesApi] =
+    useState<Paciente[]>([]);
+
+  const [triagensApi, setTriagensApi] =
+    useState(triagens);
+
+  const [voluntariosApi, setVoluntariosApi] =
+    useState(voluntarios);
+
+  const [agendamentosApi, setAgendamentosApi] =
+    useState(agendamentos);
+
+  const [tratamentosApi, setTratamentosApi] =
+    useState(tratamentos);
+
+  const [carregandoPacientes, setCarregandoPacientes] =
+    useState(false);
+
+  const [erroPacientes, setErroPacientes] =
+    useState("");
+
+  const [notificacaoAtual, setNotificacaoAtual] =
+    useState(0);
+
+  const [modalAberto, setModalAberto] =
+    useState(false);
+
+  const [tipoCadastro, setTipoCadastro] =
+    useState<TipoCadastro>("paciente");
 
   useEffect(() => {
     const intervalo = setInterval(() => {
       setNotificacaoAtual((atual) =>
-        atual === notificacoes.length - 1 ? 0 : atual + 1,
+        atual === notificacoes.length - 1
+          ? 0
+          : atual + 1,
       );
     }, 3500);
 
@@ -221,53 +177,106 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    async function carregarPacientes() {
-      setCarregandoPacientes(true);
-      setErroPacientes("");
-
+    async function carregarDados() {
       try {
-        const response = await apiGet<any[]>("/paciente");
+        setCarregandoPacientes(true);
 
-        const pacientesFormatados: Paciente[] = response.map((paciente) => ({
-          nome:
-            paciente.nome ||
-            paciente.nm_paci ||
-            paciente.nomePaciente ||
-            "Nome não informado",
-          cpf: String(paciente.cpf || paciente.cpf_paci || paciente.id || ""),
-          telefone:
-            paciente.telefone ||
-            paciente.telefone_paci ||
-            paciente.tel_paci ||
-            "Telefone não informado",
-          status:
-            paciente.status ||
-            paciente.status_paci ||
-            "Cadastrado",
-          urgencia:
-            paciente.urgencia ||
-            paciente.urgencia_paci ||
-            "Não definida",
-        }));
+        const pacientesResponse =
+          await apiGet<any[]>("/paciente");
+
+        const triagensResponse =
+          await apiGet<any[]>("/triagem");
+
+        const voluntariosResponse =
+          await apiGet<any[]>("/voluntario");
+
+        const agendamentosResponse =
+          await apiGet<any[]>("/agendamento");
+
+        const tratamentosResponse =
+          await apiGet<any[]>("/tratamento");
 
         setPacientesApi(
-          pacientesFormatados.length > 0 ? pacientesFormatados : pacientes,
+          pacientesResponse.map((paciente) => ({
+            nome: paciente.nome,
+            cpf: paciente.cpf,
+            telefone: paciente.telefone,
+            status: paciente.status,
+            urgencia:
+              paciente.status === "Ativo"
+                ? "Baixa"
+                : paciente.status ===
+                  "Em Andamento"
+                ? "Média"
+                : "Alta",
+          })),
         );
+
+        setTriagensApi(
+          triagensResponse.map((triagem) => ({
+            paciente: `Paciente ${triagem.paciente}`,
+            descricao: triagem.descricao,
+            urgencia: triagem.urgencia,
+            status: triagem.status,
+          })),
+        );
+
+        setVoluntariosApi(
+          voluntariosResponse.map(
+            (voluntario) => ({
+              nome: voluntario.nome,
+              cro: voluntario.cro,
+              telefone:
+                voluntario.telefone,
+              email: voluntario.email,
+            }),
+          ),
+        );
+
+        setAgendamentosApi(
+          agendamentosResponse.map(
+            (agendamento) => ({
+              paciente: `Paciente ${agendamento.paciente}`,
+              voluntario: `Voluntário ${agendamento.voluntario}`,
+              data: agendamento.dataHora,
+              local: agendamento.local,
+              status: agendamento.status,
+            }),
+          ),
+        );
+
+        setTratamentosApi(
+          tratamentosResponse.map(
+            (tratamento) => ({
+              paciente: `Paciente ${tratamento.paciente}`,
+              voluntario: `Voluntário ${tratamento.voluntario}`,
+              inicio: tratamento.dataInicio,
+              conclusao:
+                tratamento.dataConclusao ||
+                "Em andamento",
+              status: tratamento.status,
+            }),
+          ),
+        );
+
+        setErroPacientes("");
       } catch (error) {
         console.error(error);
+
         setErroPacientes(
-          "Não foi possível carregar os pacientes da API. Exibindo dados simulados.",
+          "Erro ao carregar API",
         );
-        setPacientesApi(pacientes);
       } finally {
         setCarregandoPacientes(false);
       }
     }
 
-    carregarPacientes();
+    carregarDados();
   }, []);
 
-  const abrirModalCadastro = (tipo: TipoCadastro) => {
+  const abrirModalCadastro = (
+    tipo: TipoCadastro,
+  ) => {
     setTipoCadastro(tipo);
     setModalAberto(true);
   };
@@ -280,60 +289,127 @@ export default function Dashboard() {
   const pacientesFiltrados = useMemo(() => {
     return pacientesApi.filter(
       (paciente) =>
-        paciente.nome.toLowerCase().includes(buscaPaciente.toLowerCase()) ||
-        paciente.cpf.includes(buscaPaciente) ||
-        paciente.status.toLowerCase().includes(buscaPaciente.toLowerCase()) ||
-        paciente.urgencia.toLowerCase().includes(buscaPaciente.toLowerCase()),
+        paciente.nome
+          .toLowerCase()
+          .includes(
+            buscaPaciente.toLowerCase(),
+          ) ||
+        paciente.cpf.includes(
+          buscaPaciente,
+        ) ||
+        paciente.status
+          .toLowerCase()
+          .includes(
+            buscaPaciente.toLowerCase(),
+          ) ||
+        paciente.urgencia
+          .toLowerCase()
+          .includes(
+            buscaPaciente.toLowerCase(),
+          ),
     );
   }, [buscaPaciente, pacientesApi]);
 
   const triagensFiltradas = useMemo(() => {
-    return triagens.filter(
+    return triagensApi.filter(
       (triagem) =>
-        triagem.paciente.toLowerCase().includes(buscaTriagem.toLowerCase()) ||
-        triagem.urgencia.toLowerCase().includes(buscaTriagem.toLowerCase()) ||
-        triagem.status.toLowerCase().includes(buscaTriagem.toLowerCase()),
+        triagem.paciente
+          .toLowerCase()
+          .includes(
+            buscaTriagem.toLowerCase(),
+          ) ||
+        triagem.urgencia
+          .toLowerCase()
+          .includes(
+            buscaTriagem.toLowerCase(),
+          ) ||
+        triagem.status
+          .toLowerCase()
+          .includes(
+            buscaTriagem.toLowerCase(),
+          ),
     );
-  }, [buscaTriagem]);
+  }, [buscaTriagem, triagensApi]);
 
-  const voluntariosFiltrados = useMemo(() => {
-    return voluntarios.filter(
-      (voluntario) =>
-        voluntario.nome.toLowerCase().includes(buscaVoluntario.toLowerCase()) ||
-        voluntario.cro.toLowerCase().includes(buscaVoluntario.toLowerCase()) ||
-        voluntario.email.toLowerCase().includes(buscaVoluntario.toLowerCase()),
-    );
-  }, [buscaVoluntario]);
+  const voluntariosFiltrados =
+    useMemo(() => {
+      return voluntariosApi.filter(
+        (voluntario) =>
+          voluntario.nome
+            .toLowerCase()
+            .includes(
+              buscaVoluntario.toLowerCase(),
+            ) ||
+          voluntario.cro
+            .toLowerCase()
+            .includes(
+              buscaVoluntario.toLowerCase(),
+            ) ||
+          voluntario.email
+            .toLowerCase()
+            .includes(
+              buscaVoluntario.toLowerCase(),
+            ),
+      );
+    }, [
+      buscaVoluntario,
+      voluntariosApi,
+    ]);
 
-  const agendamentosFiltrados = useMemo(() => {
-    return agendamentos.filter(
-      (agendamento) =>
-        agendamento.paciente
-          .toLowerCase()
-          .includes(buscaAgendamento.toLowerCase()) ||
-        agendamento.voluntario
-          .toLowerCase()
-          .includes(buscaAgendamento.toLowerCase()) ||
-        agendamento.status
-          .toLowerCase()
-          .includes(buscaAgendamento.toLowerCase()) ||
-        agendamento.local.toLowerCase().includes(buscaAgendamento.toLowerCase()),
-    );
-  }, [buscaAgendamento]);
+  const agendamentosFiltrados =
+    useMemo(() => {
+      return agendamentosApi.filter(
+        (agendamento) =>
+          agendamento.paciente
+            .toLowerCase()
+            .includes(
+              buscaAgendamento.toLowerCase(),
+            ) ||
+          agendamento.voluntario
+            .toLowerCase()
+            .includes(
+              buscaAgendamento.toLowerCase(),
+            ) ||
+          agendamento.status
+            .toLowerCase()
+            .includes(
+              buscaAgendamento.toLowerCase(),
+            ) ||
+          agendamento.local
+            .toLowerCase()
+            .includes(
+              buscaAgendamento.toLowerCase(),
+            ),
+      );
+    }, [
+      buscaAgendamento,
+      agendamentosApi,
+    ]);
 
-  const tratamentosFiltrados = useMemo(() => {
-    return tratamentos.filter(
-      (tratamento) =>
-        tratamento.paciente
-          .toLowerCase()
-          .includes(buscaTratamento.toLowerCase()) ||
-        tratamento.voluntario
-          .toLowerCase()
-          .includes(buscaTratamento.toLowerCase()) ||
-        tratamento.status.toLowerCase().includes(buscaTratamento.toLowerCase()),
-    );
-  }, [buscaTratamento]);
-
+  const tratamentosFiltrados =
+    useMemo(() => {
+      return tratamentosApi.filter(
+        (tratamento) =>
+          tratamento.paciente
+            .toLowerCase()
+            .includes(
+              buscaTratamento.toLowerCase(),
+            ) ||
+          tratamento.voluntario
+            .toLowerCase()
+            .includes(
+              buscaTratamento.toLowerCase(),
+            ) ||
+          tratamento.status
+            .toLowerCase()
+            .includes(
+              buscaTratamento.toLowerCase(),
+            ),
+      );
+    }, [
+      buscaTratamento,
+      tratamentosApi,
+    ]);
   const menuClass = (aba: AbaDashboard) =>
     abaAtiva === aba
       ? "bg-blue-600 text-white shadow-lg shadow-blue-950/40"
@@ -382,8 +458,12 @@ export default function Dashboard() {
                 </div>
 
                 <div>
-                  <p className="font-bold text-white text-lg">Administrador</p>
-                  <p className="text-slate-400 text-sm">Sistema NexoraTech</p>
+                  <p className="font-bold text-white text-lg">
+                    Administrador
+                  </p>
+                  <p className="text-slate-400 text-sm">
+                    Sistema NexoraTech
+                  </p>
                 </div>
               </div>
 
@@ -393,7 +473,9 @@ export default function Dashboard() {
                     Status
                   </p>
 
-                  <p className="text-emerald-400 font-semibold">Online</p>
+                  <p className="text-emerald-400 font-semibold">
+                    Online
+                  </p>
                 </div>
 
                 <button
@@ -422,9 +504,13 @@ export default function Dashboard() {
 
               <div className="flex items-center gap-4">
                 <div className="text-right hidden sm:block">
-                  <p className="font-bold text-white">Usuário Admin</p>
+                  <p className="font-bold text-white">
+                    Usuário Admin
+                  </p>
 
-                  <p className="text-sm text-slate-400">Administrador</p>
+                  <p className="text-sm text-slate-400">
+                    Administrador
+                  </p>
                 </div>
 
                 <div className="w-14 h-14 rounded-full bg-blue-600 flex items-center justify-center font-extrabold text-white text-lg">
@@ -493,6 +579,7 @@ export default function Dashboard() {
                 />
               </CardTabela>
             )}
+
             {abaAtiva === "triagens" && (
               <CardTabela
                 titulo="Triagens"
