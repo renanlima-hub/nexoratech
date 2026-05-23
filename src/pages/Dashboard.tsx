@@ -1,5 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { apiGet } from "../services/api.ts";
+import CardTabela from "../components/Dashboard/CardTabela.tsx";
+import CardAcaoRapida from "../components/Dashboard/CardAcaoRapida.tsx";
+import CampoBusca from "../components/Dashboard/CampuBusca.tsx";
+import GraficoBarras from "../components/Dashboard/GraficoBarras.tsx";
+import GraficoEvolucao from "../components/Dashboard/GraficoEvolucao.tsx";
+import ModalCadastro from "../components/Dashboard/ModalCadastro.tsx";
 
 type AbaDashboard =
   | "visao"
@@ -9,6 +16,16 @@ type AbaDashboard =
   | "agendamentos"
   | "tratamentos";
 
+type TipoCadastro = "paciente" | "triagem" | "agendamento" | "voluntario";
+
+type Paciente = {
+  nome: string;
+  cpf: string;
+  telefone: string;
+  status: string;
+  urgencia: string;
+};
+
 const indicadores = [
   { titulo: "Pacientes", valor: "320", descricao: "Cadastrados" },
   { titulo: "Voluntários", valor: "40", descricao: "Dentistas ativos" },
@@ -17,7 +34,7 @@ const indicadores = [
   { titulo: "Tratamentos", valor: "74", descricao: "Acompanhados" },
 ];
 
-const pacientes = [
+const pacientes: Paciente[] = [
   {
     nome: "Ana Clara Santos",
     cpf: "12345678901",
@@ -48,8 +65,6 @@ const pacientes = [
   },
 ];
 
-const pacientesMock = pacientes;
-
 const triagens = [
   {
     paciente: "Ana Clara Santos",
@@ -71,8 +86,6 @@ const triagens = [
   },
 ];
 
-const triagensMock = triagens;
-
 const voluntarios = [
   {
     nome: "Dr. Rafael Lima",
@@ -93,8 +106,6 @@ const voluntarios = [
     email: "bruno@nexora.com",
   },
 ];
-
-const voluntariosMock = voluntarios;
 
 const agendamentos = [
   {
@@ -120,8 +131,6 @@ const agendamentos = [
   },
 ];
 
-const agendamentosMock = agendamentos;
-
 const tratamentos = [
   {
     paciente: "Lucas Martins",
@@ -145,8 +154,6 @@ const tratamentos = [
     status: "Aguardando",
   },
 ];
-
-const tratamentosMock = tratamentos;
 
 const atividadesRecentes = [
   "Nova triagem registrada para Ana Clara Santos.",
@@ -194,7 +201,14 @@ export default function Dashboard() {
   const [buscaVoluntario, setBuscaVoluntario] = useState("");
   const [buscaAgendamento, setBuscaAgendamento] = useState("");
   const [buscaTratamento, setBuscaTratamento] = useState("");
+
+  const [pacientesApi, setPacientesApi] = useState<Paciente[]>(pacientes);
+  const [carregandoPacientes, setCarregandoPacientes] = useState(false);
+  const [erroPacientes, setErroPacientes] = useState("");
+
   const [notificacaoAtual, setNotificacaoAtual] = useState(0);
+  const [modalAberto, setModalAberto] = useState(false);
+  const [tipoCadastro, setTipoCadastro] = useState<TipoCadastro>("paciente");
 
   useEffect(() => {
     const intervalo = setInterval(() => {
@@ -206,20 +220,72 @@ export default function Dashboard() {
     return () => clearInterval(intervalo);
   }, []);
 
+  useEffect(() => {
+    async function carregarPacientes() {
+      setCarregandoPacientes(true);
+      setErroPacientes("");
+
+      try {
+        const response = await apiGet<any[]>("/paciente");
+
+        const pacientesFormatados: Paciente[] = response.map((paciente) => ({
+          nome:
+            paciente.nome ||
+            paciente.nm_paci ||
+            paciente.nomePaciente ||
+            "Nome não informado",
+          cpf: String(paciente.cpf || paciente.cpf_paci || paciente.id || ""),
+          telefone:
+            paciente.telefone ||
+            paciente.telefone_paci ||
+            paciente.tel_paci ||
+            "Telefone não informado",
+          status:
+            paciente.status ||
+            paciente.status_paci ||
+            "Cadastrado",
+          urgencia:
+            paciente.urgencia ||
+            paciente.urgencia_paci ||
+            "Não definida",
+        }));
+
+        setPacientesApi(
+          pacientesFormatados.length > 0 ? pacientesFormatados : pacientes,
+        );
+      } catch (error) {
+        console.error(error);
+        setErroPacientes(
+          "Não foi possível carregar os pacientes da API. Exibindo dados simulados.",
+        );
+        setPacientesApi(pacientes);
+      } finally {
+        setCarregandoPacientes(false);
+      }
+    }
+
+    carregarPacientes();
+  }, []);
+
+  const abrirModalCadastro = (tipo: TipoCadastro) => {
+    setTipoCadastro(tipo);
+    setModalAberto(true);
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("usuarioLogado");
     navigate("/");
   };
 
   const pacientesFiltrados = useMemo(() => {
-    return pacientes.filter(
+    return pacientesApi.filter(
       (paciente) =>
         paciente.nome.toLowerCase().includes(buscaPaciente.toLowerCase()) ||
         paciente.cpf.includes(buscaPaciente) ||
         paciente.status.toLowerCase().includes(buscaPaciente.toLowerCase()) ||
         paciente.urgencia.toLowerCase().includes(buscaPaciente.toLowerCase()),
     );
-  }, [buscaPaciente]);
+  }, [buscaPaciente, pacientesApi]);
 
   const triagensFiltradas = useMemo(() => {
     return triagens.filter(
@@ -251,9 +317,7 @@ export default function Dashboard() {
         agendamento.status
           .toLowerCase()
           .includes(buscaAgendamento.toLowerCase()) ||
-        agendamento.local
-          .toLowerCase()
-          .includes(buscaAgendamento.toLowerCase()),
+        agendamento.local.toLowerCase().includes(buscaAgendamento.toLowerCase()),
     );
   }, [buscaAgendamento]);
 
@@ -375,6 +439,7 @@ export default function Dashboard() {
                   <p className="text-xs uppercase tracking-[0.2em] text-cyan-400">
                     Notificação
                   </p>
+
                   <p className="text-slate-300 mt-1">
                     {notificacoes[notificacaoAtual]}
                   </p>
@@ -408,6 +473,9 @@ export default function Dashboard() {
                 pacientesFiltrados={pacientesFiltrados}
                 buscaPaciente={buscaPaciente}
                 setBuscaPaciente={setBuscaPaciente}
+                abrirModalCadastro={abrirModalCadastro}
+                carregandoPacientes={carregandoPacientes}
+                erroPacientes={erroPacientes}
               />
             )}
 
@@ -420,10 +488,11 @@ export default function Dashboard() {
                   pacientes={pacientesFiltrados}
                   buscaPaciente={buscaPaciente}
                   setBuscaPaciente={setBuscaPaciente}
+                  carregando={carregandoPacientes}
+                  erro={erroPacientes}
                 />
               </CardTabela>
             )}
-
             {abaAtiva === "triagens" && (
               <CardTabela
                 titulo="Triagens"
@@ -478,6 +547,13 @@ export default function Dashboard() {
           </div>
         </section>
       </div>
+
+      {modalAberto && (
+        <ModalCadastro
+          tipo={tipoCadastro}
+          onClose={() => setModalAberto(false)}
+        />
+      )}
     </main>
   );
 }
@@ -486,10 +562,16 @@ function VisaoGeral({
   pacientesFiltrados,
   buscaPaciente,
   setBuscaPaciente,
+  abrirModalCadastro,
+  carregandoPacientes,
+  erroPacientes,
 }: {
-  pacientesFiltrados: typeof pacientesMock;
+  pacientesFiltrados: Paciente[];
   buscaPaciente: string;
   setBuscaPaciente: React.Dispatch<React.SetStateAction<string>>;
+  abrirModalCadastro: (tipo: TipoCadastro) => void;
+  carregandoPacientes: boolean;
+  erroPacientes: string;
 }) {
   return (
     <>
@@ -511,6 +593,41 @@ function VisaoGeral({
           </article>
         ))}
       </div>
+
+      <section className="bg-slate-950 border border-slate-800 rounded-3xl p-6 mb-6">
+        <div className="mb-5">
+          <h2 className="text-3xl font-bold text-white">Ações rápidas</h2>
+          <p className="text-slate-400 text-sm mt-1">
+            Cadastros visuais preparados para futura integração com a API.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          <CardAcaoRapida
+            titulo="Novo paciente"
+            descricao="Cadastrar paciente e dados iniciais."
+            onClick={() => abrirModalCadastro("paciente")}
+          />
+
+          <CardAcaoRapida
+            titulo="Nova triagem"
+            descricao="Registrar urgência e descrição."
+            onClick={() => abrirModalCadastro("triagem")}
+          />
+
+          <CardAcaoRapida
+            titulo="Novo agendamento"
+            descricao="Vincular paciente, data e local."
+            onClick={() => abrirModalCadastro("agendamento")}
+          />
+
+          <CardAcaoRapida
+            titulo="Novo voluntário"
+            descricao="Cadastrar dentista voluntário."
+            onClick={() => abrirModalCadastro("voluntario")}
+          />
+        </div>
+      </section>
 
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 mb-6">
         <GraficoBarras
@@ -553,6 +670,8 @@ function VisaoGeral({
             pacientes={pacientesFiltrados}
             buscaPaciente={buscaPaciente}
             setBuscaPaciente={setBuscaPaciente}
+            carregando={carregandoPacientes}
+            erro={erroPacientes}
           />
         </CardTabela>
 
@@ -577,54 +696,18 @@ function VisaoGeral({
   );
 }
 
-function CardTabela({
-  titulo,
-  descricao,
-  children,
-}: {
-  titulo: string;
-  descricao: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="bg-slate-950 border border-slate-800 rounded-3xl p-6">
-      <h2 className="text-3xl font-bold text-white mb-2">{titulo}</h2>
-      <p className="text-slate-400 text-sm mb-6">{descricao}</p>
-      {children}
-    </section>
-  );
-}
-
-function CampoBusca({
-  placeholder,
-  value,
-  onChange,
-}: {
-  placeholder: string;
-  value: string;
-  onChange: React.Dispatch<React.SetStateAction<string>>;
-}) {
-  return (
-    <div className="mb-6">
-      <input
-        type="text"
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-slate-900 border border-slate-700 text-white rounded-2xl px-5 py-4 outline-none focus:border-cyan-400 transition"
-      />
-    </div>
-  );
-}
-
 function TabelaPacientes({
   pacientes,
   buscaPaciente,
   setBuscaPaciente,
+  carregando,
+  erro,
 }: {
-  pacientes: typeof pacientesMock;
+  pacientes: Paciente[];
   buscaPaciente: string;
   setBuscaPaciente: React.Dispatch<React.SetStateAction<string>>;
+  carregando?: boolean;
+  erro?: string;
 }) {
   const navigate = useNavigate();
 
@@ -635,6 +718,18 @@ function TabelaPacientes({
         value={buscaPaciente}
         onChange={setBuscaPaciente}
       />
+
+      {carregando && (
+        <div className="mb-4 rounded-2xl border border-slate-800 bg-slate-900 px-5 py-4 text-slate-300">
+          Carregando pacientes da API...
+        </div>
+      )}
+
+      {erro && (
+        <div className="mb-4 rounded-2xl border border-yellow-700 bg-yellow-900/30 px-5 py-4 text-yellow-300">
+          {erro}
+        </div>
+      )}
 
       <div className="overflow-x-auto">
         <table className="w-full text-left">
@@ -702,22 +797,18 @@ function TabelaTriagens({
   triagens,
   buscaTriagem,
   setBuscaTriagem,
-}: {
-  triagens: typeof triagensMock;
-  buscaTriagem: string;
-  setBuscaTriagem: React.Dispatch<React.SetStateAction<string>>;
-}) {
+}: any) {
   return (
     <>
       <CampoBusca
-        placeholder="Pesquisar triagem por paciente, urgência ou status..."
+        placeholder="Pesquisar triagem..."
         value={buscaTriagem}
         onChange={setBuscaTriagem}
       />
 
       <TabelaBase
         headers={["Paciente", "Descrição", "Urgência", "Status"]}
-        rows={triagens.map((triagem) => [
+        rows={triagens.map((triagem: any) => [
           triagem.paciente,
           triagem.descricao,
           triagem.urgencia,
@@ -733,22 +824,18 @@ function TabelaVoluntarios({
   voluntarios,
   buscaVoluntario,
   setBuscaVoluntario,
-}: {
-  voluntarios: typeof voluntariosMock;
-  buscaVoluntario: string;
-  setBuscaVoluntario: React.Dispatch<React.SetStateAction<string>>;
-}) {
+}: any) {
   return (
     <>
       <CampoBusca
-        placeholder="Pesquisar voluntário por nome, CRO ou e-mail..."
+        placeholder="Pesquisar voluntário..."
         value={buscaVoluntario}
         onChange={setBuscaVoluntario}
       />
 
       <TabelaBase
         headers={["Nome", "CRO", "Telefone", "E-mail"]}
-        rows={voluntarios.map((voluntario) => [
+        rows={voluntarios.map((voluntario: any) => [
           voluntario.nome,
           voluntario.cro,
           voluntario.telefone,
@@ -764,22 +851,18 @@ function TabelaAgendamentos({
   agendamentos,
   buscaAgendamento,
   setBuscaAgendamento,
-}: {
-  agendamentos: typeof agendamentosMock;
-  buscaAgendamento: string;
-  setBuscaAgendamento: React.Dispatch<React.SetStateAction<string>>;
-}) {
+}: any) {
   return (
     <>
       <CampoBusca
-        placeholder="Pesquisar agendamento por paciente, voluntário, local ou status..."
+        placeholder="Pesquisar agendamento..."
         value={buscaAgendamento}
         onChange={setBuscaAgendamento}
       />
 
       <TabelaBase
         headers={["Paciente", "Voluntário", "Data", "Local", "Status"]}
-        rows={agendamentos.map((agendamento) => [
+        rows={agendamentos.map((agendamento: any) => [
           agendamento.paciente,
           agendamento.voluntario,
           agendamento.data,
@@ -796,22 +879,18 @@ function TabelaTratamentos({
   tratamentos,
   buscaTratamento,
   setBuscaTratamento,
-}: {
-  tratamentos: typeof tratamentosMock;
-  buscaTratamento: string;
-  setBuscaTratamento: React.Dispatch<React.SetStateAction<string>>;
-}) {
+}: any) {
   return (
     <>
       <CampoBusca
-        placeholder="Pesquisar tratamento por paciente, voluntário ou status..."
+        placeholder="Pesquisar tratamento..."
         value={buscaTratamento}
         onChange={setBuscaTratamento}
       />
 
       <TabelaBase
         headers={["Paciente", "Voluntário", "Início", "Conclusão", "Status"]}
-        rows={tratamentos.map((tratamento) => [
+        rows={tratamentos.map((tratamento: any) => [
           tratamento.paciente,
           tratamento.voluntario,
           tratamento.inicio,
@@ -828,17 +907,13 @@ function TabelaBase({
   headers,
   rows,
   emptyMessage,
-}: {
-  headers: string[];
-  rows: string[][];
-  emptyMessage: string;
-}) {
+}: any) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-left">
         <thead>
           <tr className="border-b border-slate-800 text-sm text-slate-400">
-            {headers.map((header) => (
+            {headers.map((header: string) => (
               <th key={header} className="py-3 pr-4">
                 {header}
               </th>
@@ -847,13 +922,16 @@ function TabelaBase({
         </thead>
 
         <tbody>
-          {rows.map((row) => (
+          {rows.map((row: string[], index: number) => (
             <tr
-              key={row.join("-")}
+              key={index}
               className="border-b border-slate-900 last:border-0"
             >
-              {row.map((cell) => (
-                <td key={cell} className="py-4 pr-4 text-slate-300">
+              {row.map((cell: string, cellIndex: number) => (
+                <td
+                  key={cellIndex}
+                  className="py-4 pr-4 text-slate-300"
+                >
                   {cell}
                 </td>
               ))}
@@ -863,90 +941,10 @@ function TabelaBase({
       </table>
 
       {rows.length === 0 && (
-        <div className="text-center text-slate-400 py-10">{emptyMessage}</div>
+        <div className="text-center text-slate-400 py-10">
+          {emptyMessage}
+        </div>
       )}
     </div>
-  );
-}
-
-function GraficoBarras({
-  titulo,
-  dados,
-}: {
-  titulo: string;
-  dados: { label: string; valor: number }[];
-}) {
-  const maiorValor = Math.max(...dados.map((item) => item.valor));
-
-  return (
-    <section className="bg-slate-950 border border-slate-800 rounded-3xl p-6">
-      <h2 className="text-3xl font-bold text-white mb-5">{titulo}</h2>
-
-      <div className="space-y-5">
-        {dados.map((item) => (
-          <div key={item.label}>
-            <div className="flex justify-between text-sm mb-2">
-              <span className="text-slate-300">{item.label}</span>
-              <span className="text-cyan-400 font-bold">{item.valor}</span>
-            </div>
-
-            <div className="w-full h-3 bg-slate-800 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 rounded-full"
-                style={{ width: `${(item.valor / maiorValor) * 100}%` }}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function GraficoEvolucao({
-  titulo,
-  dados,
-}: {
-  titulo: string;
-  dados: { mes: string; valor: number }[];
-}) {
-  const maiorValor = Math.max(...dados.map((item) => item.valor));
-
-  return (
-    <section className="bg-slate-950 border border-slate-800 rounded-3xl p-6">
-      <h2 className="text-3xl font-bold text-white mb-5">{titulo}</h2>
-
-      <div className="flex items-end justify-between gap-3 h-52">
-        {dados.map((item, index) => {
-          const altura = Math.max((item.valor / maiorValor) * 170, 20);
-          const subiu = index === 0 || item.valor >= dados[index - 1].valor;
-
-          return (
-            <div key={item.mes} className="flex flex-col items-center flex-1">
-              <span
-                className={`text-xs mb-2 font-bold ${
-                  subiu ? "text-emerald-400" : "text-red-400"
-                }`}
-              >
-                {subiu ? "↑" : "↓"} {item.valor}
-              </span>
-
-              <div className="w-full bg-slate-800 rounded-t-2xl overflow-hidden flex items-end">
-                <div
-                  className={`w-full rounded-t-2xl ${
-                    subiu
-                      ? "bg-gradient-to-t from-emerald-500 to-cyan-300"
-                      : "bg-gradient-to-t from-red-500 to-orange-300"
-                  }`}
-                  style={{ height: `${altura}px` }}
-                />
-              </div>
-
-              <p className="text-slate-400 text-sm mt-3">{item.mes}</p>
-            </div>
-          );
-        })}
-      </div>
-    </section>
   );
 }
