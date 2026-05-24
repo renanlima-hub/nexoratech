@@ -413,7 +413,7 @@ export default function Dashboard() {
   const menuClass = (aba: AbaDashboard) =>
     abaAtiva === aba
       ? "bg-blue-600 text-white shadow-lg shadow-blue-950/40"
-      : "text-slate-300 hover:bg-slate-800 hover:text-white";
+      : "text-slate-300 hover:bg-slate-800 hover:translate-x-1 hover:text-white";
 
   return (
     <main className="min-h-screen bg-black text-slate-100">
