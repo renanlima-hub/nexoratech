@@ -672,7 +672,7 @@ function VisaoGeral({
         {indicadores.map((item) => (
           <article
             key={item.titulo}
-            className="bg-slate-950 border border-slate-800 rounded-3xl p-7"
+            className="bg-slate-950 border border-slate-800 rounded-3xl p-7 cursor-pointer"
           >
             <h2 className="text-sm font-semibold text-slate-400">
               {item.titulo}
