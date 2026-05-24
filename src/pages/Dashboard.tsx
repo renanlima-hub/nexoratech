@@ -856,7 +856,7 @@ function TabelaPacientes({
                 <td className="py-4 pr-4 text-slate-300">{paciente.status}</td>
 
                 <td className="py-4 pr-4">
-                  <span className="inline-flex rounded-full bg-blue-600/20 text-cyan-300 px-3 py-1 text-sm font-semibold">
+                  <span className={`inline-flex rounded-full px-3 py-1 text-sm font-semibold ${ paciente.urgencia === "Alta" ? "bg-red-500/20 text-red-400": paciente.urgencia === "Média" ? "bg-yellow-500/20 text-yellow-300": "bg-emerald-500/20 text-emerald-400"}`}>
                     {paciente.urgencia}
                   </span>
                 </td>
