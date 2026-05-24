@@ -206,7 +206,7 @@ export default function ModalCadastro({
                     e.target.value,
                   )
                 }
-                className="w-full bg-slate-900 border border-slate-700 text-white rounded-2xl px-4 py-3 outline-none focus:border-cyan-400 transition"
+                className="w-full bg-slate-900 border border-slate-700 text-white rounded-2xl px-4 py-3 outline-none focus:border-cyan-400 transition duration-300 transition"
               />
             </div>
           ))}
