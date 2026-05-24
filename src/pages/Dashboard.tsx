@@ -286,130 +286,93 @@ export default function Dashboard() {
     navigate("/");
   };
 
-  const pacientesFiltrados = useMemo(() => {
-    return pacientesApi.filter(
-      (paciente) =>
-        paciente.nome
-          .toLowerCase()
-          .includes(
-            buscaPaciente.toLowerCase(),
-          ) ||
-        paciente.cpf.includes(
-          buscaPaciente,
-        ) ||
-        paciente.status
-          .toLowerCase()
-          .includes(
-            buscaPaciente.toLowerCase(),
-          ) ||
-        paciente.urgencia
-          .toLowerCase()
-          .includes(
-            buscaPaciente.toLowerCase(),
-          ),
+ const pacientesFiltrados = useMemo(() => {
+  return pacientesApi.filter((paciente) => {
+    const nome = paciente.nome || "";
+    const cpf = paciente.cpf || "";
+    const status = paciente.status || "";
+    const urgencia = paciente.urgencia || "";
+
+    return (
+      nome.toLowerCase().includes(buscaPaciente.toLowerCase()) ||
+      cpf.includes(buscaPaciente) ||
+      status.toLowerCase().includes(buscaPaciente.toLowerCase()) ||
+      urgencia.toLowerCase().includes(buscaPaciente.toLowerCase())
     );
-  }, [buscaPaciente, pacientesApi]);
+  });
+}, [buscaPaciente, pacientesApi]);
 
-  const triagensFiltradas = useMemo(() => {
-    return triagensApi.filter(
-      (triagem) =>
-        triagem.paciente
-          .toLowerCase()
-          .includes(
-            buscaTriagem.toLowerCase(),
-          ) ||
-        triagem.urgencia
-          .toLowerCase()
-          .includes(
-            buscaTriagem.toLowerCase(),
-          ) ||
-        triagem.status
-          .toLowerCase()
-          .includes(
-            buscaTriagem.toLowerCase(),
-          ),
+const triagensFiltradas = useMemo(() => {
+  return triagensApi.filter((triagem) => {
+    const paciente = triagem.paciente || "";
+    const urgencia = triagem.urgencia || "";
+    const status = triagem.status || "";
+
+    return (
+      paciente.toLowerCase().includes(buscaTriagem.toLowerCase()) ||
+      urgencia.toLowerCase().includes(buscaTriagem.toLowerCase()) ||
+      status.toLowerCase().includes(buscaTriagem.toLowerCase())
     );
-  }, [buscaTriagem, triagensApi]);
+  });
+}, [buscaTriagem, triagensApi]);
 
-  const voluntariosFiltrados =
-    useMemo(() => {
-      return voluntariosApi.filter(
-        (voluntario) =>
-          voluntario.nome
-            .toLowerCase()
-            .includes(
-              buscaVoluntario.toLowerCase(),
-            ) ||
-          voluntario.cro
-            .toLowerCase()
-            .includes(
-              buscaVoluntario.toLowerCase(),
-            ) ||
-          voluntario.email
-            .toLowerCase()
-            .includes(
-              buscaVoluntario.toLowerCase(),
-            ),
-      );
-    }, [
-      buscaVoluntario,
-      voluntariosApi,
-    ]);
+const voluntariosFiltrados = useMemo(() => {
+  return voluntariosApi.filter((voluntario) => {
+    const nome = voluntario.nome || "";
+    const cro = voluntario.cro || "";
+    const email = voluntario.email || "";
 
-  const agendamentosFiltrados =
-    useMemo(() => {
-      return agendamentosApi.filter(
-        (agendamento) =>
-          agendamento.paciente
-            .toLowerCase()
-            .includes(
-              buscaAgendamento.toLowerCase(),
-            ) ||
-          agendamento.voluntario
-            .toLowerCase()
-            .includes(
-              buscaAgendamento.toLowerCase(),
-            ) ||
-          agendamento.status
-            .toLowerCase()
-            .includes(
-              buscaAgendamento.toLowerCase(),
-            ) ||
-          agendamento.local
-            .toLowerCase()
-            .includes(
-              buscaAgendamento.toLowerCase(),
-            ),
-      );
-    }, [
-      buscaAgendamento,
-      agendamentosApi,
-    ]);
+    return (
+      nome.toLowerCase().includes(buscaVoluntario.toLowerCase()) ||
+      cro.toLowerCase().includes(buscaVoluntario.toLowerCase()) ||
+      email.toLowerCase().includes(buscaVoluntario.toLowerCase())
+    );
+  });
+}, [buscaVoluntario, voluntariosApi]);
 
-  const tratamentosFiltrados =
-    useMemo(() => {
-      return tratamentosApi.filter(
-        (tratamento) =>
-          tratamento.paciente
-            .toLowerCase()
-            .includes(
-              buscaTratamento.toLowerCase(),
-            ) ||
-          tratamento.voluntario
-            .toLowerCase()
-            .includes(
-              buscaTratamento.toLowerCase(),
-            ) ||
-          tratamento.status
-            .toLowerCase()
-            .includes(
-              buscaTratamento.toLowerCase(),
-            ),
-      );
-    }, [
-      buscaTratamento,
-      tratamentosApi,
-    ]);
+const agendamentosFiltrados = useMemo(() => {
+  return agendamentosApi.filter((agendamento) => {
+    const paciente = agendamento.paciente || "";
+    const voluntario = agendamento.voluntario || "";
+    const status = agendamento.status || "";
+    const local = agendamento.local || "";
+
+    return (
+      paciente
+        .toLowerCase()
+        .includes(buscaAgendamento.toLowerCase()) ||
+      voluntario
+        .toLowerCase()
+        .includes(buscaAgendamento.toLowerCase()) ||
+      status
+        .toLowerCase()
+        .includes(buscaAgendamento.toLowerCase()) ||
+      local
+        .toLowerCase()
+        .includes(buscaAgendamento.toLowerCase())
+    );
+  });
+}, [buscaAgendamento, agendamentosApi]);
+
+const tratamentosFiltrados = useMemo(() => {
+  return tratamentosApi.filter((tratamento) => {
+    const paciente = tratamento.paciente || "";
+    const voluntario = tratamento.voluntario || "";
+    const status = tratamento.status || "";
+
+    return (
+      paciente
+        .toLowerCase()
+        .includes(buscaTratamento.toLowerCase()) ||
+      voluntario
+        .toLowerCase()
+        .includes(buscaTratamento.toLowerCase()) ||
+      status
+        .toLowerCase()
+        .includes(buscaTratamento.toLowerCase())
+    );
+  });
+}, [buscaTratamento, tratamentosApi]);
   const menuClass = (aba: AbaDashboard) =>
     abaAtiva === aba
       ? "bg-blue-600 text-white shadow-lg shadow-blue-950/40"
