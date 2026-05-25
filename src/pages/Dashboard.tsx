@@ -286,10 +286,10 @@ export default function Dashboard() {
     navigate("/");
   };
 
- const pacientesFiltrados = useMemo(() => {
+const pacientesFiltrados = useMemo(() => {
   return pacientesApi.filter((paciente) => {
     const nome = paciente.nome || "";
-    const cpf = paciente.cpf || "";
+    const cpf = String(paciente.cpf || "");
     const status = paciente.status || "";
     const urgencia = paciente.urgencia || "";
 
